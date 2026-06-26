@@ -21,6 +21,13 @@ describe('contenido semilla', () => {
     }
   });
 
+  it('todos los lexemas tienen una frase de ejemplo', () => {
+    for (const l of LEXEMAS) {
+      expect(l.ejemplo?.hanzi.length ?? 0).toBeGreaterThan(0);
+      expect(l.ejemplo?.es.length ?? 0).toBeGreaterThan(0);
+    }
+  });
+
   it('la dificultad está entre 3 y 7 y es coherente con esChengyu', () => {
     for (const l of LEXEMAS) {
       expect(l.dificultad).toBeGreaterThanOrEqual(3);

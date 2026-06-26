@@ -1,6 +1,6 @@
 import type { LexemaSemilla } from '../types';
 
-// 26 palabras HSK 5-6 tematizadas (economía / sociedad / "neijuan").
+// 26 palabras HSK 5-6 tematizadas (economía / sociedad / "neijuan"), con ejemplo de uso.
 export const HSK: readonly LexemaSemilla[] = [
   {
     id: 'w_jingji',
@@ -11,6 +11,10 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['economia'],
+    ejemplo: {
+      hanzi: '中国的经济发展得很快。',
+      es: 'La economía de China se desarrolla muy rápido.',
+    },
   },
   {
     id: 'w_qushi',
@@ -21,6 +25,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['economia'],
+    ejemplo: { hanzi: '这是不可避免的趋势。', es: 'Es una tendencia inevitable.' },
   },
   {
     id: 'w_xiaolv',
@@ -31,6 +36,10 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['trabajo', 'neijuan'],
+    ejemplo: {
+      hanzi: '用这个工具能提高效率。',
+      es: 'Con esta herramienta se mejora la eficiencia.',
+    },
   },
   {
     id: 'w_jiaolv',
@@ -41,6 +50,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['sociedad', 'neijuan'],
+    ejemplo: { hanzi: '考试前他感到很焦虑。', es: 'Antes del examen se sentía muy ansioso.' },
   },
   {
     id: 'w_peiyang',
@@ -51,6 +61,10 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['educacion'],
+    ejemplo: {
+      hanzi: '父母应该培养孩子的兴趣。',
+      es: 'Los padres deben cultivar los intereses de sus hijos.',
+    },
   },
   {
     id: 'w_pingheng',
@@ -61,6 +75,10 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['sociedad'],
+    ejemplo: {
+      hanzi: '工作和生活要保持平衡。',
+      es: 'Hay que mantener el equilibrio entre el trabajo y la vida.',
+    },
   },
   {
     id: 'w_ziyuan',
@@ -71,6 +89,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['economia'],
+    ejemplo: { hanzi: '我们要节约资源。', es: 'Debemos ahorrar recursos.' },
   },
   {
     id: 'w_xianxiang',
@@ -81,6 +100,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['sociedad'],
+    ejemplo: { hanzi: '这是一种普遍的社会现象。', es: 'Es un fenómeno social muy extendido.' },
   },
   {
     id: 'w_guannian',
@@ -91,6 +111,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['sociedad'],
+    ejemplo: { hanzi: '他的观念比较传统。', es: 'Su mentalidad es bastante tradicional.' },
   },
   {
     id: 'w_zeren',
@@ -101,6 +122,10 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['sociedad'],
+    ejemplo: {
+      hanzi: '保护环境是每个人的责任。',
+      es: 'Proteger el medio ambiente es responsabilidad de todos.',
+    },
   },
   {
     id: 'w_quefa',
@@ -111,6 +136,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['general'],
+    ejemplo: { hanzi: '他缺乏工作经验。', es: 'Le falta experiencia laboral.' },
   },
   {
     id: 'w_chengdan',
@@ -121,6 +147,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['trabajo'],
+    ejemplo: { hanzi: '这个后果由你来承担。', es: 'Las consecuencias las asumes tú.' },
   },
   {
     id: 'w_maodun',
@@ -131,6 +158,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['sociedad'],
+    ejemplo: { hanzi: '他们之间产生了矛盾。', es: 'Surgió un conflicto entre ellos.' },
   },
   {
     id: 'w_tuoxie',
@@ -141,6 +169,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['sociedad'],
+    ejemplo: { hanzi: '双方最后做出了妥协。', es: 'Ambas partes acabaron cediendo.' },
   },
   {
     id: 'w_jinshen',
@@ -151,6 +180,10 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['caracter'],
+    ejemplo: {
+      hanzi: '做重要决定时要谨慎。',
+      es: 'Hay que ser prudente al tomar decisiones importantes.',
+    },
   },
   {
     id: 'w_xianzhu',
@@ -161,6 +194,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['general'],
+    ejemplo: { hanzi: '治疗的效果非常显著。', es: 'El efecto del tratamiento es muy notable.' },
   },
   {
     id: 'w_juxian',
@@ -171,6 +205,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['general'],
+    ejemplo: { hanzi: '这种方法有很大的局限。', es: 'Este método tiene grandes limitaciones.' },
   },
   {
     id: 'w_qingxiang',
@@ -181,6 +216,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['general'],
+    ejemplo: { hanzi: '我更倾向于第一个方案。', es: 'Me inclino más por la primera opción.' },
   },
   {
     id: 'w_hengliang',
@@ -191,6 +227,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['general'],
+    ejemplo: { hanzi: '我们需要衡量利弊。', es: 'Necesitamos sopesar los pros y los contras.' },
   },
   {
     id: 'w_boxue',
@@ -201,6 +238,10 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['economia', 'neijuan'],
+    ejemplo: {
+      hanzi: '工人受到了严重的剥削。',
+      es: 'Los trabajadores sufrieron una grave explotación.',
+    },
   },
   {
     id: 'w_kewang',
@@ -211,6 +252,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['emocion'],
+    ejemplo: { hanzi: '年轻人渴望成功。', es: 'Los jóvenes anhelan el éxito.' },
   },
   {
     id: 'w_chenmo',
@@ -221,6 +263,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['emocion'],
+    ejemplo: { hanzi: '面对批评，他选择了沉默。', es: 'Ante las críticas, optó por el silencio.' },
   },
   {
     id: 'w_pangda',
@@ -231,6 +274,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['general'],
+    ejemplo: { hanzi: '这是一个庞大的工程。', es: 'Es un proyecto colosal.' },
   },
   {
     id: 'w_ningju',
@@ -241,6 +285,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['sociedad'],
+    ejemplo: { hanzi: '这件事凝聚了大家的力量。', es: 'Este asunto aglutinó la fuerza de todos.' },
   },
   {
     id: 'w_yanjun',
@@ -251,6 +296,7 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 6,
     tags: ['sociedad'],
+    ejemplo: { hanzi: '就业形势非常严峻。', es: 'La situación del empleo es muy crítica.' },
   },
   {
     id: 'w_qianli',
@@ -261,5 +307,6 @@ export const HSK: readonly LexemaSemilla[] = [
     esChengyu: false,
     dificultad: 5,
     tags: ['general'],
+    ejemplo: { hanzi: '这个市场有很大的潜力。', es: 'Este mercado tiene un gran potencial.' },
   },
 ];
