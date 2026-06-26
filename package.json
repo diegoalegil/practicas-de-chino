@@ -44,5 +44,8 @@
     "*.{css,json,md,html}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "ts-fsrs": "^5.4.1"
   }
 }
