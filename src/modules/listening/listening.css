@@ -1,0 +1,356 @@
+.lis {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5, 20px);
+}
+
+.lis-portada__titulo {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--color-tinta);
+}
+
+/* Aviso de voz no disponible */
+.lis-aviso {
+  border: 1px solid var(--color-oro);
+  border-left-width: 4px;
+  background: color-mix(in srgb, var(--color-oro) 10%, var(--color-superficie));
+  border-radius: var(--radio);
+  padding: var(--esp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.lis-aviso__titulo {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-tinta);
+}
+
+.lis-aviso__texto {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-tinta-suave);
+  line-height: 1.5;
+}
+
+/* Menú de ejercicios */
+.lis-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.lis-card {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  text-align: left;
+  font: inherit;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-linea);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra);
+  padding: var(--esp-4);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.lis-card:active {
+  transform: scale(0.99);
+}
+
+.lis-card:hover {
+  box-shadow: var(--sombra-fuerte);
+}
+
+.lis-card__icono {
+  font-size: 1.8rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lis-card__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.lis-card__titulo {
+  font-weight: 600;
+  color: var(--color-tinta);
+}
+
+.lis-card__desc {
+  font-size: 0.88rem;
+  color: var(--color-tinta-suave);
+}
+
+/* Cabecera de ejercicio */
+.lis-cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.lis-volver {
+  appearance: none;
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  color: var(--color-sello);
+  font: inherit;
+  font-weight: 600;
+  padding: var(--esp-1) 0;
+  cursor: pointer;
+}
+
+.lis-titulo {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--color-tinta);
+}
+
+.lis-instruccion {
+  margin: 0;
+  color: var(--color-tinta-suave);
+  font-size: 0.95rem;
+}
+
+/* Botón de reproducir */
+.lis-play {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  align-self: center;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-jade);
+  background: color-mix(in srgb, var(--color-jade) 8%, var(--color-superficie));
+  border: 1px solid var(--color-jade);
+  border-radius: var(--radio);
+  padding: var(--esp-3) var(--esp-6);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.lis-play:active {
+  transform: scale(0.97);
+}
+
+.lis-play__icono {
+  font-size: 1.2rem;
+}
+
+/* Formulario de dictado */
+.lis-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.lis-input {
+  font: inherit;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: var(--esp-3) var(--esp-4);
+  border: 1px solid var(--color-linea);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-tinta);
+}
+
+.lis-input:focus {
+  outline: 2px solid var(--color-jade);
+  outline-offset: 1px;
+}
+
+.lis-input:disabled {
+  opacity: 0.7;
+}
+
+.lis-separador {
+  text-align: center;
+  color: var(--color-tinta-suave);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Opciones de hanzi */
+.lis-opciones {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--esp-3);
+}
+
+.lis-opcion {
+  appearance: none;
+  font-family: var(--fuente-hanzi);
+  font-size: 2rem;
+  color: var(--color-tinta);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-linea);
+  border-radius: var(--radio);
+  padding: var(--esp-4);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.lis-opciones--grande .lis-opcion {
+  font-size: 2.6rem;
+  min-height: 110px;
+}
+
+.lis-opcion:active {
+  transform: scale(0.97);
+}
+
+.lis-opcion.is-correcta {
+  border-color: var(--color-jade);
+  background: color-mix(in srgb, var(--color-jade) 14%, var(--color-superficie));
+}
+
+.lis-opcion.is-fallo {
+  border-color: var(--color-sello);
+  background: color-mix(in srgb, var(--color-sello) 12%, var(--color-superficie));
+}
+
+.lis-opcion:disabled {
+  cursor: default;
+}
+
+/* Tonos */
+.lis-tonos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--esp-3);
+}
+
+.lis-tono {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-2);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-linea);
+  border-radius: var(--radio);
+  padding: var(--esp-4);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.lis-tono:active {
+  transform: scale(0.97);
+}
+
+.lis-tono.is-correcta {
+  border-color: var(--color-jade);
+  background: color-mix(in srgb, var(--color-jade) 14%, var(--color-superficie));
+}
+
+.lis-tono.is-fallo {
+  border-color: var(--color-sello);
+  background: color-mix(in srgb, var(--color-sello) 12%, var(--color-superficie));
+}
+
+.lis-tono:disabled {
+  cursor: default;
+}
+
+.lis-tono__svg {
+  width: 64px;
+  height: 64px;
+}
+
+.lis-tono__guia {
+  stroke: var(--color-linea);
+  stroke-width: 1.5;
+}
+
+.lis-tono__curva {
+  stroke: var(--color-tinta);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lis-tono__curva.is-activa {
+  stroke: var(--color-jade);
+}
+
+.lis-tono__num {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-tinta-suave);
+}
+
+/* Banda de veredicto */
+.lis-veredicto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-1);
+  text-align: center;
+  border-radius: var(--radio-lg);
+  padding: var(--esp-5, 20px) var(--esp-4);
+  border: 1px solid var(--color-linea);
+}
+
+.lis-veredicto.is-ok {
+  border-color: var(--color-jade);
+  background: color-mix(in srgb, var(--color-jade) 10%, var(--color-superficie));
+}
+
+.lis-veredicto.is-mal {
+  border-color: var(--color-sello);
+  background: color-mix(in srgb, var(--color-sello) 8%, var(--color-superficie));
+}
+
+.lis-veredicto__marca {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.lis-veredicto.is-ok .lis-veredicto__marca {
+  color: var(--color-jade);
+}
+
+.lis-veredicto.is-mal .lis-veredicto__marca {
+  color: var(--color-sello);
+}
+
+.lis-veredicto__texto {
+  margin: 0;
+  color: var(--color-tinta-suave);
+  font-size: 0.9rem;
+}
+
+.lis-veredicto__hanzi {
+  margin: 0;
+  font-family: var(--fuente-hanzi);
+  font-size: 2.2rem;
+  color: var(--color-tinta);
+}
+
+.lis-veredicto__glosa {
+  margin: 0;
+  color: var(--color-sello);
+  font-size: 1rem;
+}
+
+.lis-siguiente {
+  align-self: stretch;
+  text-align: center;
+}
