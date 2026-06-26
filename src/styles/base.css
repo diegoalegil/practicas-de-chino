@@ -1,1 +1,169 @@
-/* Estilos base mobile-first. Grupo B/C. */
+/* Reset y estilos base mobile-first (línea base; el Grupo B/C los amplían). */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--fuente-ui);
+  background: var(--color-papel);
+  color: var(--color-tinta);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#app {
+  min-height: 100dvh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-jade);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --- Shell --- */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: calc(env(safe-area-inset-top) + var(--esp-3)) var(--esp-4) var(--esp-3);
+  background: color-mix(in srgb, var(--color-papel) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-linea);
+}
+
+.app-header__brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--esp-2);
+}
+
+.app-header__hanzi {
+  font-family: var(--fuente-hanzi);
+  font-size: 1.5rem;
+  color: var(--color-sello);
+}
+
+.app-header__title {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.app-outlet {
+  flex: 1;
+  padding: var(--esp-4);
+  padding-bottom: calc(var(--tabbar-altura) + env(safe-area-inset-bottom) + var(--esp-6));
+}
+
+/* --- Tabbar --- */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-around;
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+  padding: var(--esp-1) var(--esp-2) calc(env(safe-area-inset-bottom) + var(--esp-1));
+  background: color-mix(in srgb, var(--color-superficie) 92%, transparent);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--color-linea);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  padding: var(--esp-2) 0;
+  color: var(--color-tinta-suave);
+  font-size: 0.7rem;
+  transition: color 0.2s ease;
+}
+
+.tab__hanzi {
+  font-family: var(--fuente-hanzi);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.tab.is-active {
+  color: var(--color-sello);
+}
+
+/* --- Tarjetas y home --- */
+.card {
+  display: block;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-linea);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.home__lead {
+  font-size: 1.05rem;
+  color: var(--color-tinta-suave);
+  margin: var(--esp-2) 0 var(--esp-6);
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--esp-3);
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--esp-4);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.home-card:active {
+  transform: scale(0.98);
+  box-shadow: var(--sombra-fuerte);
+}
+
+.home-card__hanzi {
+  font-family: var(--fuente-hanzi);
+  font-size: 2rem;
+  color: var(--color-sello);
+  line-height: 1.1;
+}
+
+.home-card__title {
+  font-weight: 600;
+}
+
+.home-card__desc {
+  font-size: 0.85rem;
+  color: var(--color-tinta-suave);
+}

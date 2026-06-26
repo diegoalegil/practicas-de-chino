@@ -1,3 +1,60 @@
-// Mapa de rutas -> loader de vista. Implementado en A18 / cada módulo.
+import type { Route } from './router';
 
-export {};
+export const routes: readonly Route[] = [
+  {
+    path: '/',
+    title: 'Inicio',
+    label: 'Inicio',
+    hanzi: '家',
+    tab: true,
+    load: () => import('../modules/home').then((m) => m.createHomeView()),
+  },
+  {
+    path: '/vocabulario',
+    title: 'Vocabulario',
+    label: 'Vocab',
+    hanzi: '词',
+    tab: true,
+    load: () => import('../modules/vocab').then((m) => m.createVocabView()),
+  },
+  {
+    path: '/lectura',
+    title: 'Lectura',
+    label: 'Lectura',
+    hanzi: '读',
+    tab: true,
+    load: () => import('../modules/reading').then((m) => m.createReadingView()),
+  },
+  {
+    path: '/escucha',
+    title: 'Escucha',
+    label: 'Escucha',
+    hanzi: '听',
+    tab: true,
+    load: () => import('../modules/listening').then((m) => m.createListeningView()),
+  },
+  {
+    path: '/escritura',
+    title: 'Escritura',
+    label: 'Escritura',
+    hanzi: '写',
+    tab: true,
+    load: () => import('../modules/writing').then((m) => m.createWritingView()),
+  },
+  {
+    path: '/diagnostico',
+    title: 'Diagnóstico',
+    label: 'Diagnóstico',
+    hanzi: '诊',
+    tab: false,
+    load: () => import('../modules/diagnostic').then((m) => m.createDiagnosticView()),
+  },
+  {
+    path: '/progreso',
+    title: 'Progreso',
+    label: 'Progreso',
+    hanzi: '进',
+    tab: false,
+    load: () => import('../modules/progress').then((m) => m.createProgressView()),
+  },
+];
