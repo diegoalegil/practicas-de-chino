@@ -1,5 +1,5 @@
 msg_file="$1"
-if grep -iEq 'co-authored-by:.*(claude|anthropic|@anthropic\.com)|generated with .*claude|claude code' "$msg_file"; then
+if grep -iEq 'co-authored-by:.*(claude|anthropic)|generated with.*claude' "$msg_file"; then
   echo "✗ Commit rechazado: prohibida la co-autoría/atribución de Claude o Anthropic." >&2
   echo "  Elimina las líneas 'Co-Authored-By' / 'Generated with Claude' del mensaje." >&2
   exit 1

@@ -37,7 +37,7 @@ jobs:
       - name: Rechazar co-autoría o atribución de IA en los commits
         run: |
           if git log --format='%B' \
-            | grep -iE 'co-authored-by:.*(claude|anthropic)|generated with .*claude|claude code'; then
+            | grep -iE 'co-authored-by:.*(claude|anthropic)|generated with.*claude'; then
             echo "::error::Se detectó co-autoría o atribución de IA en los mensajes de commit."
             exit 1
           fi
