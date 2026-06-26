@@ -1,1 +1,129 @@
-/* Efectos estéticos: tinta 水墨, sellos, papel. Grupo B. */
+/* Efectos estéticos: tinta 水墨, sellos, papel. Grupo B.
+   Solo tokens; detalles sutiles de textura, separadores y transiciones. */
+
+/* --- Textura de papel: fibra muy tenue sobre el fondo global --- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(
+      circle at 18% 22%,
+      color-mix(in srgb, var(--color-tinta) 4%, transparent) 0,
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 82% 78%,
+      color-mix(in srgb, var(--color-tinta) 3%, transparent) 0,
+      transparent 42%
+    );
+}
+
+/* --- Transiciones de tema suaves al cambiar claro/oscuro --- */
+body {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* --- Separador de tinta: pincelada que se desvanece a los bordes --- */
+.ink-separator {
+  height: 1px;
+  border: 0;
+  margin: var(--esp-6) 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-linea) 12%,
+    color-mix(in srgb, var(--color-tinta-suave) 55%, transparent) 50%,
+    var(--color-linea) 88%,
+    transparent
+  );
+}
+
+/* --- Sello rojo reutilizable (acento 印) --- */
+.ink-seal {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.8em;
+  min-height: 1.8em;
+  padding: 0.1em 0.25em;
+  font-family: var(--fuente-hanzi);
+  color: var(--color-superficie);
+  background: var(--color-sello);
+  border-radius: var(--esp-2);
+  box-shadow: var(--sombra);
+}
+
+/* --- Marca de agua hanzi: caracter gigante tenue de fondo en secciones --- */
+.ink-watermark {
+  position: relative;
+  isolation: isolate;
+}
+
+.ink-watermark::after {
+  content: attr(data-hanzi);
+  position: absolute;
+  top: 50%;
+  right: var(--esp-2);
+  transform: translateY(-50%);
+  z-index: -1;
+  font-family: var(--fuente-hanzi);
+  font-size: 7rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--color-tinta) 5%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* --- Microinteraccion: realce de tinta al pulsar tarjetas con esta clase --- */
+.ink-press {
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.2s ease;
+}
+
+.ink-press:active {
+  transform: scale(0.985);
+  box-shadow: var(--sombra-fuerte);
+  border-color: color-mix(in srgb, var(--color-sello) 35%, var(--color-linea));
+}
+
+/* --- Aparicion suave de contenido recien montado --- */
+@keyframes ink-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ink-enter {
+  animation: ink-fade-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* --- View Transitions: cross-fade suave entre rutas --- */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.28s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* --- Respeto a movimiento reducido --- */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
+  .ink-enter {
+    animation: none;
+  }
+}

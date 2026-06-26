@@ -1,0 +1,61 @@
+/* Overlay del splash de entrada 水墨. Solo tokens, sin colores hardcodeados. */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(
+    120% 120% at 50% 30%,
+    color-mix(in srgb, var(--color-superficie) 96%, transparent),
+    var(--color-papel)
+  );
+  -webkit-tap-highlight-color: transparent;
+}
+
+.splash__escena {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(60vw, 240px);
+  height: min(60vw, 240px);
+}
+
+.splash__hanzi {
+  font-family: var(--fuente-hanzi);
+  font-size: min(40vw, 160px);
+  line-height: 1;
+  color: var(--color-tinta);
+  text-shadow: 0 2px 16px color-mix(in srgb, var(--color-tinta) 12%, transparent);
+  will-change: transform, opacity, clip-path;
+}
+
+.splash__sello {
+  position: absolute;
+  right: 4%;
+  bottom: 2%;
+  display: grid;
+  place-items: center;
+  width: min(16vw, 64px);
+  height: min(16vw, 64px);
+  font-family: var(--fuente-hanzi);
+  font-size: min(9vw, 34px);
+  line-height: 1;
+  color: var(--color-superficie);
+  background: var(--color-sello);
+  border-radius: var(--esp-2);
+  box-shadow: var(--sombra-fuerte);
+  will-change: transform, opacity;
+}
+
+.splash--reducido .splash__hanzi,
+.splash--reducido .splash__sello {
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash__hanzi,
+  .splash__sello {
+    will-change: auto;
+  }
+}

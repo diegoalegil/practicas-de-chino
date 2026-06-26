@@ -1,4 +1,4 @@
-/* Tokens de diseño base (línea base; el Grupo B amplía con modo oscuro y fuentes hanzi). */
+/* Tokens de diseño base. Tema claro 水墨 + tema oscuro coherente. */
 :root {
   /* Pigmentos 水墨 */
   --color-papel: #f7f3ea;
@@ -30,4 +30,54 @@
   /* Layout */
   --tabbar-altura: 64px;
   --ancho-max: 640px;
+}
+
+/* --- Tema oscuro: tinta china calida sobre papel nocturno --- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Pigmentos invertidos: papel -> tinta oscura calida */
+    --color-papel: #16130f;
+    --color-superficie: #211c17;
+    --color-tinta: #f1e9da;
+    --color-tinta-suave: #b6aa98;
+    --color-sello: #e0584f;
+    --color-sello-tenue: #9c3b34;
+    --color-jade: #5bbf98;
+    --color-oro: #d9aa54;
+    --color-linea: #352d24;
+
+    /* Sombras mas densas para profundidad sobre fondo oscuro */
+    --sombra: 0 2px 12px rgba(0, 0, 0, 0.45);
+    --sombra-fuerte: 0 8px 24px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Override manual por atributo, gana sobre la media query del sistema. */
+[data-theme='dark'] {
+  --color-papel: #16130f;
+  --color-superficie: #211c17;
+  --color-tinta: #f1e9da;
+  --color-tinta-suave: #b6aa98;
+  --color-sello: #e0584f;
+  --color-sello-tenue: #9c3b34;
+  --color-jade: #5bbf98;
+  --color-oro: #d9aa54;
+  --color-linea: #352d24;
+  --sombra: 0 2px 12px rgba(0, 0, 0, 0.45);
+  --sombra-fuerte: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Override manual a claro, por si el sistema esta en oscuro. */
+[data-theme='light'] {
+  --color-papel: #f7f3ea;
+  --color-superficie: #fffdf8;
+  --color-tinta: #1f1a17;
+  --color-tinta-suave: #5b524b;
+  --color-sello: #b91c1c;
+  --color-sello-tenue: #d96a5a;
+  --color-jade: #2f7d62;
+  --color-oro: #c08a2d;
+  --color-linea: #e6dfce;
+  --sombra: 0 2px 10px rgba(31, 26, 23, 0.08);
+  --sombra-fuerte: 0 6px 20px rgba(31, 26, 23, 0.14);
 }
