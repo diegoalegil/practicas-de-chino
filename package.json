@@ -1,0 +1,17 @@
+{
+  "name": "practicas-de-chino",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "PWA para reactivar y practicar chino mandarín (HSK 5-6, chengyu) — vocabulario SRS, lectura, escucha y escritura de hanzi.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vite": "^7.0.0"
+  }
+}
