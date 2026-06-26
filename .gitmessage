@@ -1,0 +1,11 @@
+# <tipo>(<ámbito>): <resumen en imperativo, ≤72 caracteres>
+#
+# Tipos:   feat, fix, chore, docs, style, refactor, perf, test, build, ci
+# Ámbitos: vocab, reading, listening, writing, diagnostic, progress,
+#          srs, pwa, ui, core, router, settings, onboarding, ci, security
+#
+# Cuerpo (opcional): explica QUÉ y POR QUÉ, no el cómo.
+# Deja una línea en blanco entre el resumen y el cuerpo.
+#
+# REGLA: prohibido 'Co-Authored-By' y cualquier atribución a Claude/Anthropic
+#        o a otra IA. Estos commits son de autoría humana.
