@@ -1,5 +1,6 @@
 import type { View } from '../../types';
 import { el } from '../../ui/dom';
+import { t } from '../../core/i18n';
 
 interface Destino {
   path: string;
@@ -42,7 +43,7 @@ export function createHomeView(): View {
           { class: 'home' },
           el('p', {
             class: 'home__lead',
-            text: 'Bienvenida de nuevo. Vamos a despertar tu chino 中文.',
+            text: t('home.lead'),
           }),
           grid,
         ),
