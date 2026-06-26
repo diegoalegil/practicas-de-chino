@@ -1,5 +1,7 @@
-const app = document.querySelector<HTMLDivElement>('#app');
+import { mountApp } from './app';
 
-if (app) {
-  app.textContent = '练中文';
+const root = document.querySelector<HTMLDivElement>('#app');
+
+if (root) {
+  mountApp(root);
 }
