@@ -1,0 +1,171 @@
+.vocab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-6);
+  perspective: 1200px;
+}
+
+.vocab__progreso {
+  margin: 0;
+  text-align: center;
+  color: var(--color-tinta-suave);
+  font-size: 0.9rem;
+}
+
+.vocab__cargando {
+  text-align: center;
+  color: var(--color-tinta-suave);
+}
+
+/* Tarjeta con volteo 3D */
+.srs-card {
+  position: relative;
+  min-height: 260px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.srs-card.is-revealed {
+  transform: rotateY(180deg);
+  cursor: default;
+}
+
+.srs-card__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-3);
+  padding: var(--esp-6);
+  text-align: center;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-linea);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra);
+  backface-visibility: hidden;
+}
+
+.srs-card__back {
+  transform: rotateY(180deg);
+}
+
+.srs-card__hanzi {
+  font-family: var(--fuente-hanzi);
+  font-size: 4.5rem;
+  line-height: 1.1;
+  color: var(--color-tinta);
+}
+
+.srs-card__pista {
+  font-size: 0.8rem;
+  color: var(--color-tinta-suave);
+}
+
+.srs-card__pinyin {
+  font-size: 1.6rem;
+  color: var(--color-sello);
+}
+
+.srs-card__es {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.srs-card__ejemplo {
+  font-family: var(--fuente-hanzi);
+  font-size: 1.05rem;
+  color: var(--color-tinta-suave);
+  margin: 0;
+}
+
+/* Botones */
+.btn {
+  appearance: none;
+  border: 1px solid var(--color-linea);
+  background: var(--color-superficie);
+  color: var(--color-tinta);
+  font: inherit;
+  padding: var(--esp-3) var(--esp-4);
+  border-radius: var(--radio);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--tinta {
+  background: var(--color-sello);
+  color: var(--color-papel);
+  border-color: transparent;
+  font-weight: 600;
+  text-align: center;
+}
+
+.btn--audio {
+  background: transparent;
+  border-color: var(--color-jade);
+  color: var(--color-jade);
+}
+
+.vocab__grados {
+  display: flex;
+  gap: var(--esp-3);
+}
+
+.vocab__grados .btn,
+.vocab__grados .grade {
+  flex: 1;
+}
+
+.grade {
+  appearance: none;
+  font: inherit;
+  font-weight: 600;
+  padding: var(--esp-4);
+  border-radius: var(--radio);
+  border: 1px solid transparent;
+  color: var(--color-papel);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.grade:active {
+  transform: scale(0.97);
+}
+
+.grade--otra {
+  background: var(--color-sello);
+}
+
+.grade--bien {
+  background: var(--color-jade);
+}
+
+.grade--facil {
+  background: var(--color-oro);
+}
+
+.vocab--fin {
+  align-items: center;
+  text-align: center;
+  gap: var(--esp-4);
+  padding-top: var(--esp-8);
+}
+
+.vocab__hanzi-grande {
+  font-size: 3rem;
+  color: var(--color-jade);
+  margin: 0;
+}
+
+.vocab__resumen {
+  font-size: 1.1rem;
+  color: var(--color-tinta-suave);
+}
