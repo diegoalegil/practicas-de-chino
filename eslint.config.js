@@ -1,6 +1,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import globals from 'globals';
 
 export default tseslint.config(
   { ignores: ['dist', 'dev-dist', 'coverage', 'node_modules'] },
@@ -25,6 +26,14 @@ export default tseslint.config(
   },
   {
     files: ['**/*.js'],
+    extends: [tseslint.configs.disableTypeChecked],
+  },
+  {
+    // Scripts de tooling Node (generación de iconos, subsetting de fuentes, etc.)
+    files: ['scripts/**/*.{js,mjs}'],
+    languageOptions: {
+      globals: { ...globals.node },
+    },
     extends: [tseslint.configs.disableTypeChecked],
   },
   eslintConfigPrettier,
