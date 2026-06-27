@@ -92,11 +92,14 @@ describe('métricas de lectura', () => {
 });
 
 describe('datos semilla', () => {
-  it('hay dos textos con preguntas y glosas completas', () => {
-    expect(TEXTOS).toHaveLength(2);
+  it('los textos tienen preguntas y glosas completas', () => {
+    expect(TEXTOS.length).toBeGreaterThanOrEqual(2);
+    const ids = TEXTOS.map((t) => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
     for (const texto of TEXTOS) {
-      expect(texto.preguntas).toHaveLength(3);
+      expect(texto.preguntas.length).toBeGreaterThanOrEqual(1);
       expect(texto.glosas.length).toBeGreaterThan(0);
+      expect(texto.cuerpo.length).toBeGreaterThan(0);
       for (const pregunta of texto.preguntas) {
         expect(pregunta.correcta).toBeGreaterThanOrEqual(0);
         expect(pregunta.correcta).toBeLessThan(pregunta.opciones.length);

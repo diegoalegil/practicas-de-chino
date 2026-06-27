@@ -15,6 +15,10 @@ import {
   type PreguntaComprension,
   type TextoLectura,
 } from './reader.logic';
+import { agregarLexemaAlSrs } from '../vocab/agregar';
+import { LEXEMAS } from '../../content';
+
+const LEXEMA_POR_HANZI = new Map(LEXEMAS.map((l) => [l.hanzi, l.id] as const));
 
 interface ProgresoLectura {
   id: string;
@@ -160,6 +164,29 @@ export function createReadingView(): View {
         },
       }),
     );
+    const lexId = LEXEMA_POR_HANZI.get(glosa.hanzi);
+    if (lexId !== undefined) {
+      nuevo.append(
+        el('button', {
+          class: 'lectura-popover__srs',
+          text: '➕ Añadir a repaso',
+          attrs: { type: 'button', 'aria-label': `Añadir ${glosa.hanzi} a repaso` },
+          on: {
+            click: (event) => {
+              event.stopPropagation();
+              const boton = event.currentTarget;
+              if (boton instanceof HTMLButtonElement) {
+                boton.disabled = true;
+                void agregarLexemaAlSrs(lexId, new Date()).then((creada) => {
+                  boton.textContent = creada ? '✓ Añadido' : '✓ Ya estaba';
+                });
+              }
+            },
+          },
+        }),
+      );
+    }
+
     document.body.append(nuevo);
     popover = nuevo;
 

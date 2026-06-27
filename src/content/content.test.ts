@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { CHENGYU, HSK, LEXEMAS, lexemaPorId } from './index';
+import { CHENGYU, CHENGYU_EXTRA, HSK, HSK_EXTRA, LEXEMAS, lexemaPorId } from './index';
 
 describe('contenido semilla', () => {
-  it('tiene 26 palabras HSK y 18 chengyu', () => {
+  it('agrega el contenido base y el extra sin perder lexemas', () => {
     expect(HSK).toHaveLength(26);
     expect(CHENGYU).toHaveLength(18);
-    expect(LEXEMAS).toHaveLength(44);
+    expect(LEXEMAS).toHaveLength(
+      HSK.length + HSK_EXTRA.length + CHENGYU.length + CHENGYU_EXTRA.length,
+    );
+    expect(LEXEMAS.length).toBeGreaterThanOrEqual(76);
   });
 
   it('todos los ids son únicos', () => {

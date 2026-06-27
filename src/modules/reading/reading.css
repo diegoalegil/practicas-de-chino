@@ -504,3 +504,22 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.lectura-popover__srs {
+  margin-top: var(--esp-2);
+  align-self: flex-start;
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lectura-popover__srs:disabled {
+  opacity: 0.7;
+  cursor: default;
+}

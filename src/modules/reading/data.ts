@@ -1,8 +1,9 @@
 // Textos semilla para el módulo de lectura. Datos puros y tipados.
 
 import type { TextoLectura } from './reader.logic';
+import { TEXTOS_EXTRA } from '../../content/textos-extra';
 
-export const TEXTOS: readonly TextoLectura[] = [
+const TEXTOS_BASE: readonly TextoLectura[] = [
   {
     id: 'saiweng-shima',
     titulo: '塞翁失马',
@@ -143,6 +144,8 @@ export const TEXTOS: readonly TextoLectura[] = [
     ],
   },
 ];
+
+export const TEXTOS: readonly TextoLectura[] = [...TEXTOS_BASE, ...TEXTOS_EXTRA];
 
 export function textoPorId(id: string): TextoLectura | undefined {
   return TEXTOS.find((texto) => texto.id === id);
