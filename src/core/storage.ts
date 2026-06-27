@@ -1,8 +1,9 @@
 // Capa de persistencia IndexedDB (progreso) con un wrapper mínimo y tipado.
-// El versionado y las migraciones formales se añaden en R5.
+// El versionado y las migraciones viven en db-schema.ts (migración idempotente).
+import { migrarEsquema, SCHEMA_VERSION } from './db-schema';
 
 const DB_NAME = 'practicas-de-chino';
-const DB_VERSION = 1;
+const DB_VERSION = SCHEMA_VERSION;
 
 export interface IndexDef {
   name: string;
@@ -27,15 +28,11 @@ let dbPromise: Promise<IDBDatabase> | null = null;
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
-    request.onupgradeneeded = () => {
+    request.onupgradeneeded = (ev) => {
       const db = request.result;
-      for (const store of STORES) {
-        if (!db.objectStoreNames.contains(store.name)) {
-          const os = db.createObjectStore(store.name, { keyPath: store.keyPath });
-          for (const index of store.indexes ?? []) {
-            os.createIndex(index.name, index.keyPath, { unique: index.unique ?? false });
-          }
-        }
+      const tx = request.transaction;
+      if (tx) {
+        migrarEsquema(db, tx, ev.oldVersion);
       }
     };
     request.onsuccess = () => {

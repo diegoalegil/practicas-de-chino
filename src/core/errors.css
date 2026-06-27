@@ -1,0 +1,85 @@
+/* Banner del error boundary. Clases con prefijo .eb- para no colisionar. */
+
+.eb-banner {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: min(360px, calc(100% - 28px));
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 16px 16px 14px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--surface-line);
+  border-radius: var(--radio-lg, 20px);
+  box-shadow: 0 24px 50px -16px rgba(var(--shadow) / 0.5);
+  animation: eb-in 0.3s var(--ease-brush, ease);
+}
+
+@keyframes eb-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.eb-banner__body {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.eb-banner__title {
+  margin: 0;
+  font-family: var(--font-title, inherit);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.eb-banner__sub {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.eb-banner__actions {
+  display: flex;
+  gap: 8px;
+  flex: 1 1 100%;
+}
+
+.eb-banner__actions .btn {
+  flex: 1;
+}
+
+.eb-banner__close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  background: none;
+  color: var(--text-faint);
+  font-size: 13px;
+  line-height: 1;
+  border-radius: 8px;
+}
+
+.eb-banner__close:active {
+  background: var(--bg-sunken);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eb-banner {
+    animation-duration: 0.01ms;
+  }
+}
