@@ -16,10 +16,10 @@ import {
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-/** Construye el marco 田字格 (líneas guía) como SVG nativo. */
+/** Construye las diagonales 田字格 (líneas guía) como SVG nativo (oro punteado). */
 function crearGuias(): SVGSVGElement {
   const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('class', 'writing__guias');
+  svg.setAttribute('class', 'escr__guias');
   svg.setAttribute('viewBox', '0 0 100 100');
   svg.setAttribute('preserveAspectRatio', 'none');
   svg.setAttribute('aria-hidden', 'true');
@@ -30,15 +30,14 @@ function crearGuias(): SVGSVGElement {
     l.setAttribute('y1', String(y1));
     l.setAttribute('x2', String(x2));
     l.setAttribute('y2', String(y2));
-    l.setAttribute('stroke', 'var(--color-linea)');
+    l.setAttribute('stroke', 'var(--gold)');
     l.setAttribute('stroke-width', '0.6');
-    l.setAttribute('stroke-dasharray', '3 3');
+    l.setAttribute('stroke-dasharray', '3 4');
+    l.setAttribute('opacity', '0.5');
     return l;
   };
 
   svg.append(
-    linea(50, 0, 50, 100), // vertical central
-    linea(0, 50, 100, 50), // horizontal central
     linea(0, 0, 100, 100), // diagonal
     linea(100, 0, 0, 100), // diagonal
   );
@@ -65,11 +64,11 @@ export function createWritingView(): View {
     const items = estado.caracteres.map((c, indice) =>
       el(
         'li',
-        { class: 'writing__item' },
+        { class: 'escr__item' },
         el(
           'button',
           {
-            class: `writing__celda${estaPracticado(estado, indice) ? ' is-practicado' : ''}`,
+            class: `escr__celda${estaPracticado(estado, indice) ? ' is-practicado' : ''}`,
             attrs: { type: 'button', 'aria-label': `Practicar ${c.hanzi} (${c.pinyin})` },
             on: {
               click: () => {
@@ -78,12 +77,12 @@ export function createWritingView(): View {
               },
             },
           },
-          el('span', { class: 'writing__celda-hanzi', text: c.hanzi }),
-          el('span', { class: 'writing__celda-pinyin', text: c.pinyin }),
+          el('span', { class: 'escr__celda-hanzi', text: c.hanzi }),
+          el('span', { class: 'escr__celda-pinyin', text: c.pinyin }),
           ...(estaPracticado(estado, indice)
             ? [
                 el('span', {
-                  class: 'writing__celda-check',
+                  class: 'escr__celda-check',
                   attrs: { 'aria-hidden': 'true' },
                   text: '✓',
                 }),
@@ -96,13 +95,18 @@ export function createWritingView(): View {
     host.replaceChildren(
       el(
         'section',
-        { class: 'writing' },
-        el('h1', { class: 'writing__titulo', text: 'Escritura de hanzi' }),
+        { class: 'escr' },
+        el(
+          'div',
+          { class: 'escr__sec-h' },
+          el('h1', { class: 'escr__titulo', text: 'Escritura de hanzi' }),
+          el('div', { class: 'escr__brush', attrs: { 'aria-hidden': 'true' } }),
+        ),
         el('p', {
-          class: 'writing__intro',
+          class: 'escr__intro',
           text: 'Elige un carácter para ver el orden de los trazos y practicar a mano.',
         }),
-        el('ul', { class: 'writing__lista' }, ...items),
+        el('ul', { class: 'escr__lista' }, ...items),
       ),
     );
   }
@@ -114,24 +118,24 @@ export function createWritingView(): View {
       return;
     }
 
-    const marco = el('div', { class: 'writing__marco' });
+    const marco = el('div', { class: 'escr__marco' });
     const guias = crearGuias();
-    const lienzo = el('div', { class: 'writing__lienzo' });
+    const lienzo = el('div', { class: 'escr__lienzo' });
     marco.append(guias, lienzo);
 
     const estadoTexto = el('p', {
-      class: 'writing__estado',
+      class: 'escr__estado',
       attrs: { role: 'status', 'aria-live': 'polite' },
       text: 'Pulsa «Ver trazos» o «Practicar».',
     });
 
     const fijarEstado = (mensaje: string, variante?: 'error' | 'ok'): void => {
       estadoTexto.textContent = mensaje;
-      estadoTexto.className = `writing__estado${variante ? ` is-${variante}` : ''}`;
+      estadoTexto.className = `escr__estado${variante ? ` is-${variante}` : ''}`;
     };
 
     const btnVer = el('button', {
-      class: 'writing__btn writing__btn--ver',
+      class: 'escr__btn escr__btn--ver',
       text: 'Ver trazos',
       attrs: { type: 'button' },
       on: {
@@ -150,7 +154,7 @@ export function createWritingView(): View {
     });
 
     const btnPracticar = el('button', {
-      class: 'writing__btn writing__btn--practicar',
+      class: 'escr__btn escr__btn--practicar',
       text: 'Practicar',
       attrs: { type: 'button' },
       on: {
@@ -179,7 +183,7 @@ export function createWritingView(): View {
     });
 
     const btnSiguiente = el('button', {
-      class: 'writing__btn writing__btn--siguiente',
+      class: 'escr__btn escr__btn--siguiente',
       text: 'Siguiente',
       attrs: { type: 'button' },
       on: {
@@ -193,12 +197,12 @@ export function createWritingView(): View {
     host.replaceChildren(
       el(
         'section',
-        { class: 'writing writing__panel' },
+        { class: 'escr escr__panel' },
         el(
           'div',
-          { class: 'writing__cabecera' },
+          { class: 'escr__cabecera' },
           el('button', {
-            class: 'writing__volver',
+            class: 'escr__volver',
             text: '← Lista',
             attrs: { type: 'button' },
             on: {
@@ -210,14 +214,21 @@ export function createWritingView(): View {
           }),
           el(
             'div',
-            { class: 'writing__info' },
-            el('span', { class: 'writing__info-pinyin', text: caracter.pinyin }),
-            el('span', { class: 'writing__info-es', text: caracter.es }),
+            { class: 'escr__info' },
+            el('span', { class: 'escr__info-pinyin', text: caracter.pinyin }),
+            el('span', { class: 'escr__info-es', text: caracter.es }),
           ),
         ),
         marco,
+        el(
+          'div',
+          { class: 'escr__progreso', attrs: { 'aria-hidden': 'true' } },
+          el('span', { class: 'escr__wdot on' }),
+          el('span', { class: 'escr__wdot' }),
+          el('span', { class: 'escr__wdot' }),
+        ),
         estadoTexto,
-        el('div', { class: 'writing__acciones' }, btnVer, btnPracticar, btnSiguiente),
+        el('div', { class: 'escr__acciones' }, btnVer, btnPracticar, btnSiguiente),
       ),
     );
 
@@ -230,10 +241,10 @@ export function createWritingView(): View {
         showOutline: true,
         strokeAnimationSpeed: 1,
         delayBetweenStrokes: 200,
-        strokeColor: 'var(--color-tinta)',
-        outlineColor: 'var(--color-linea)',
-        highlightColor: 'var(--color-jade)',
-        drawingColor: 'var(--color-sello)',
+        strokeColor: 'var(--ink-900)',
+        outlineColor: 'var(--surface-line)',
+        highlightColor: 'var(--jade)',
+        drawingColor: 'var(--accent)',
         onLoadCharDataError: () => {
           btnVer.disabled = true;
           btnPracticar.disabled = true;

@@ -1,41 +1,63 @@
-.writing {
+/* Módulo Escritura (hanzi) — re-skin Claude Design. Prefijo escr-. */
+
+.escr {
   display: flex;
   flex-direction: column;
-  gap: var(--esp-6);
+  gap: var(--esp-5);
+  font-family: var(--font-ui);
+  color: var(--text);
 }
 
-.writing__cargando {
-  text-align: center;
-  color: var(--color-tinta-suave);
+/* Encabezado de la lista */
+.escr__sec-h {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  margin: var(--esp-2) 2px var(--esp-1);
 }
 
-.writing__titulo {
+.escr__titulo {
   margin: 0;
-  font-size: 1.3rem;
-  color: var(--color-tinta);
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 0.4px;
+  color: var(--text);
 }
 
-.writing__intro {
+.escr__brush {
+  height: 8px;
+  width: 64px;
+  background: var(--accent);
+  border-radius: 5px;
+  filter: url(#rough);
+  -webkit-mask: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+  opacity: 0.92;
+}
+
+.escr__intro {
   margin: 0;
-  color: var(--color-tinta-suave);
-  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 /* Cuadrícula de caracteres seleccionables */
-.writing__lista {
+.escr__lista {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(82px, 1fr));
   gap: var(--esp-3);
   list-style: none;
-  margin: 0;
+  margin: var(--esp-2) 0 0;
   padding: 0;
 }
 
-.writing__item {
+.escr__item {
   display: flex;
 }
 
-.writing__celda {
+.escr__celda {
   appearance: none;
   flex: 1;
   display: flex;
@@ -43,51 +65,64 @@
   align-items: center;
   gap: var(--esp-1);
   padding: var(--esp-3) var(--esp-2);
-  background: var(--color-superficie);
-  border: 1px solid var(--color-linea);
-  border-radius: var(--radio);
-  box-shadow: var(--sombra);
+  background: var(--bg-elevated);
+  border: 1px solid var(--surface-line);
+  border-radius: var(--radio-lg);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 6px 18px -16px rgba(var(--shadow) / 0.6);
   cursor: pointer;
   font: inherit;
-  color: var(--color-tinta);
+  color: var(--text);
+  position: relative;
+  overflow: hidden;
   transition:
-    transform 0.12s ease,
-    border-color 0.12s ease;
+    transform 0.14s var(--ease-ink),
+    border-color 0.2s var(--ease-ink),
+    box-shadow 0.25s var(--ease-ink);
 }
 
-.writing__celda:active {
-  transform: scale(0.96);
+.escr__celda:active {
+  transform: scale(0.97);
 }
 
-.writing__celda.is-practicado {
-  border-color: var(--color-jade);
+.escr__celda.is-practicado {
+  border-color: var(--jade);
+  background: linear-gradient(170deg, var(--bg-elevated), var(--jade-soft));
 }
 
-.writing__celda-hanzi {
-  font-family: var(--fuente-hanzi);
+.escr__celda-hanzi {
+  font-family: var(--font-read);
   font-size: 2rem;
   line-height: 1.1;
+  font-weight: 500;
+  color: var(--text);
 }
 
-.writing__celda-pinyin {
+.escr__celda-pinyin {
   font-size: 0.75rem;
-  color: var(--color-tinta-suave);
+  letter-spacing: 0.6px;
+  color: var(--text-faint);
 }
 
-.writing__celda-check {
-  font-size: 0.75rem;
-  color: var(--color-jade);
+.escr__celda-check {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--jade);
 }
 
 /* Panel de práctica */
-.writing__panel {
+.escr__panel {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--esp-4);
 }
 
-.writing__cabecera {
+.escr__cabecera {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -95,118 +130,232 @@
   gap: var(--esp-3);
 }
 
-.writing__volver {
+.escr__volver {
   appearance: none;
-  background: transparent;
-  border: none;
-  color: var(--color-sello);
+  background: var(--bg-elevated);
+  border: 1px solid var(--surface-line);
+  color: var(--accent);
   font: inherit;
+  font-weight: 600;
+  font-size: 13px;
   cursor: pointer;
-  padding: var(--esp-2);
+  padding: 8px 14px;
+  border-radius: 11px;
+  transition: transform 0.14s var(--ease-ink);
 }
 
-.writing__info {
+.escr__volver:active {
+  transform: scale(0.97);
+}
+
+.escr__info {
   text-align: right;
 }
 
-.writing__info-pinyin {
+.escr__info-pinyin {
   display: block;
   font-size: 1.2rem;
-  color: var(--color-sello);
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--accent);
 }
 
-.writing__info-es {
+.escr__info-es {
   display: block;
-  font-size: 0.9rem;
-  color: var(--color-tinta-suave);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 
 /* Marco 田字格 con líneas guía detrás del trazo */
-.writing__marco {
+.escr__marco {
   position: relative;
   width: 240px;
   height: 240px;
-  background: var(--color-superficie);
-  border: 2px solid var(--color-sello);
-  border-radius: var(--radio);
-  box-shadow: var(--sombra);
+  background: var(--bg-elevated);
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  box-shadow: 0 10px 26px -16px rgba(var(--shadow) / 0.5);
   overflow: hidden;
+  display: grid;
+  place-items: center;
 }
 
-.writing__guias {
+/* Líneas guía centrales (cruz) sobre el marco. */
+.escr__marco::before,
+.escr__marco::after {
+  content: '';
+  position: absolute;
+  background: var(--surface-line);
+  z-index: 0;
+}
+
+.escr__marco::before {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+}
+
+.escr__marco::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+}
+
+/* SVG con las diagonales punteadas en oro. */
+.escr__guias {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
 }
 
-.writing__lienzo {
+.escr__lienzo {
   position: absolute;
   inset: 0;
   z-index: 1;
 }
 
-.writing__estado {
+/* Indicadores de progreso de trazo (puntos). */
+.escr__progreso {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 8px;
+}
+
+.escr__wdot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--surface-line);
+  transition: 0.25s var(--ease-seal);
+}
+
+.escr__wdot.on {
+  background: var(--accent);
+  width: 22px;
+  border-radius: 4px;
+}
+
+.escr__estado {
   min-height: 1.4em;
   margin: 0;
   text-align: center;
   font-size: 0.9rem;
-  color: var(--color-tinta-suave);
+  color: var(--text-muted);
 }
 
-.writing__estado.is-error {
-  color: var(--color-sello);
+.escr__estado.is-error {
+  color: var(--accent);
 }
 
-.writing__estado.is-ok {
-  color: var(--color-jade);
+.escr__estado.is-ok {
+  color: var(--jade);
 }
 
-.writing__acciones {
+/* Acciones */
+.escr__acciones {
   display: flex;
   gap: var(--esp-3);
   width: 100%;
 }
 
-.writing__acciones .writing__btn {
+.escr__acciones .escr__btn {
   flex: 1;
 }
 
-.writing__btn {
+.escr__btn {
   appearance: none;
-  border: 1px solid var(--color-linea);
-  background: var(--color-superficie);
-  color: var(--color-tinta);
-  font: inherit;
+  font-family: var(--font-ui);
   font-weight: 600;
-  padding: var(--esp-3) var(--esp-4);
-  border-radius: var(--radio);
+  font-size: 14px;
+  border: 1px solid transparent;
+  background: var(--bg-elevated);
+  color: var(--text);
+  padding: 12px 14px;
+  min-height: 48px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: transform 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.14s var(--ease-ink),
+    box-shadow 0.25s,
+    background 0.2s;
 }
 
-.writing__btn:active {
+.escr__btn:active {
   transform: scale(0.97);
 }
 
-.writing__btn:disabled {
+.escr__btn:disabled {
   opacity: 0.5;
   cursor: default;
 }
 
-.writing__btn--ver {
-  border-color: var(--color-jade);
-  color: var(--color-jade);
+/* Ver trazos — jade */
+.escr__btn--ver {
+  background: var(--jade);
+  color: #fff;
+  box-shadow: 0 10px 24px -10px rgba(67, 132, 111, 0.7);
 }
 
-.writing__btn--practicar {
-  background: var(--color-sello);
-  color: var(--color-papel);
-  border-color: transparent;
+/* Practicar — acento (primary) */
+.escr__btn--practicar {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 10px 24px -10px rgba(200, 73, 44, 0.75);
 }
 
-.writing__btn--siguiente {
-  background: var(--color-oro);
-  color: var(--color-papel);
-  border-color: transparent;
+.escr__btn--practicar::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 170%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent 62%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.escr__btn--practicar:active::after {
+  animation: escr-bloom 0.55s var(--ease-ink);
+}
+
+@keyframes escr-bloom {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Siguiente — ghost */
+.escr__btn--siguiente {
+  background: var(--bg-elevated);
+  color: var(--accent);
+  border-color: var(--surface-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .escr *,
+  .escr *::before,
+  .escr *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
