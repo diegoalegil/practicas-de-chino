@@ -4,6 +4,7 @@ import { getAll } from '../../core/storage';
 import { asegurarTarjetas, tarjetasVencidas } from '../vocab/cards';
 import type { LogReview } from '../vocab/types';
 import { claveDia, rachaActual, totalRepasos } from '../progress/stats.logic';
+import { debeRecordarBackup, leerUltimoBackup } from '../../core/backup-reminder';
 import './home.css';
 
 interface Quick {
@@ -150,22 +151,34 @@ export function createHomeView(): View {
         );
       }
 
-      root.replaceChildren(
-        el(
-          'section',
-          { class: 'home' },
-          hero,
-          anillo,
-          stats,
-          el(
-            'div',
-            { class: 'home-sec' },
-            el('span', { class: 'home-sec__t', text: 'Practicar' }),
-            el('span', { class: 'home-sec__brush', attrs: { 'aria-hidden': 'true' } }),
-          ),
-          quick,
-        ),
+      const seccion = el(
+        'div',
+        { class: 'home-sec' },
+        el('span', { class: 'home-sec__t', text: 'Practicar' }),
+        el('span', { class: 'home-sec__brush', attrs: { 'aria-hidden': 'true' } }),
       );
+
+      const hijos: Node[] = [hero, anillo];
+      if (debeRecordarBackup(leerUltimoBackup(), Date.now())) {
+        hijos.push(
+          el(
+            'a',
+            { class: 'home-daily card', attrs: { href: '#/ajustes' } },
+            el(
+              'div',
+              { class: 'home-daily__body' },
+              el('p', { class: 'home-daily__t', text: 'Haz una copia de seguridad' }),
+              el('p', {
+                class: 'home-daily__s',
+                text: 'Hace tiempo que no exportas tus datos. Guárdalos por si acaso →',
+              }),
+            ),
+          ),
+        );
+      }
+      hijos.push(stats, seccion, quick);
+
+      root.replaceChildren(el('section', { class: 'home' }, ...hijos));
     },
   };
 }
