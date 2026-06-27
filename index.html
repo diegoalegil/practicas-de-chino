@@ -8,7 +8,14 @@
       name="description"
       content="Reactiva y practica tu chino mandarín: vocabulario, lectura, escucha y escritura."
     />
-    <meta name="theme-color" content="#b91c1c" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3ead8" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#15140f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -17,6 +24,30 @@
     <meta name="apple-mobile-web-app-title" content="中文" />
   </head>
   <body>
+    <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden">
+      <defs>
+        <filter id="rough" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.045"
+            numOctaves="2"
+            seed="7"
+            result="n"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3" />
+        </filter>
+        <filter id="stamp" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.13 0.1"
+            numOctaves="3"
+            seed="4"
+            result="n"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" />
+        </filter>
+      </defs>
+    </svg>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
