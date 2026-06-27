@@ -254,7 +254,7 @@ export function createReadingView(): View {
     return el(
       'div',
       { class: 'lectura__resultado' },
-      el('p', { class: 'lectura__resultado-marca', attrs: { 'aria-hidden': 'true' }, text: '✓' }),
+      el('p', { class: 'lectura__resultado-marca', attrs: { 'aria-hidden': 'true' }, text: '成' }),
       el(
         'p',
         { class: 'lectura__resultado-detalle' },
@@ -274,7 +274,7 @@ export function createReadingView(): View {
         el('strong', { text: `${String(cpm)} car/min` }),
       ),
       el('a', {
-        class: 'btn btn--tinta',
+        class: 'lectura__btn',
         attrs: { href: '#/lectura' },
         text: 'Otro texto',
         on: {
@@ -378,9 +378,14 @@ export function createReadingView(): View {
       el(
         'section',
         { class: 'lectura' },
-        el('h2', { class: 'lectura__titulo-seccion', text: 'Lectura' }),
+        el(
+          'div',
+          { class: 'lectura__sec-h' },
+          el('h2', { class: 'lectura__titulo-seccion', text: 'Lectura' }),
+          el('div', { class: 'lectura__brush', attrs: { 'aria-hidden': 'true' } }),
+        ),
         el('p', {
-          class: 'lectura__crono',
+          class: 'lectura__intro',
           text: 'Toca las palabras subrayadas para ver su glosa. Al terminar, responde las preguntas.',
         }),
         el('ul', { class: 'lectura__lista' }, ...items),
