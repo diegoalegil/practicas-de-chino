@@ -1,117 +1,227 @@
 .vocab {
   display: flex;
   flex-direction: column;
-  gap: var(--esp-6);
-  perspective: 1200px;
+  gap: var(--esp-5);
+}
+
+.vocab.scr {
+  animation: vocab-scr-in 0.4s var(--ease-brush);
+}
+
+@keyframes vocab-scr-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
 }
 
 .vocab__progreso {
   margin: 0;
   text-align: center;
-  color: var(--color-tinta-suave);
-  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .vocab__cargando {
   text-align: center;
-  color: var(--color-tinta-suave);
+  color: var(--text-muted);
 }
 
 /* Tarjeta con volteo 3D */
-.srs-card {
-  position: relative;
-  min-height: 260px;
-  transform-style: preserve-3d;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+.vocab-flip {
+  perspective: 1600px;
+  width: 100%;
   cursor: pointer;
 }
 
-.srs-card.is-revealed {
-  transform: rotateY(180deg);
+.vocab-flip.on {
   cursor: default;
 }
 
-.srs-card__face {
+.vocab-flip-inner {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--ease-brush);
+}
+
+.vocab-flip.on .vocab-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.vocab-face {
   position: absolute;
   inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 24px;
+  border: 1px solid var(--surface-line);
+  background: var(--bg-elevated);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--esp-3);
+  gap: var(--esp-2);
   padding: var(--esp-6);
   text-align: center;
-  background: var(--color-superficie);
-  border: 1px solid var(--color-linea);
-  border-radius: var(--radio-lg);
-  box-shadow: var(--sombra);
-  backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 14px 30px -20px rgba(var(--shadow) / 0.6);
 }
 
-.srs-card__back {
+.vocab-face-back {
   transform: rotateY(180deg);
+  background: linear-gradient(170deg, var(--bg-elevated), var(--bg-sunken));
 }
 
-.srs-card__hanzi {
-  font-family: var(--fuente-hanzi);
-  font-size: 4.5rem;
-  line-height: 1.1;
-  color: var(--color-tinta);
+/* Marca de agua hanzi sutil en la cara frontal */
+.vocab-wm {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-cal);
+  font-size: 280px;
+  color: var(--text);
+  opacity: 0.045;
+  pointer-events: none;
+  z-index: 0;
+  line-height: 1;
+  user-select: none;
 }
 
-.srs-card__pista {
-  font-size: 0.8rem;
-  color: var(--color-tinta-suave);
+.vocab-card-hanzi {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-read);
+  font-size: 96px;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--text);
 }
 
-.srs-card__pinyin {
-  font-size: 1.6rem;
-  color: var(--color-sello);
+.vocab-card-pista {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--esp-3);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
-.srs-card__es {
-  font-size: 1.15rem;
-  font-weight: 600;
+.vocab-card-pinyin {
+  font-size: 19px;
+  color: var(--text-faint);
+  letter-spacing: 1.5px;
 }
 
-.srs-card__ejemplo {
-  font-family: var(--fuente-hanzi);
+.vocab-card-es {
+  margin-top: var(--esp-2);
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.vocab-card-ejemplo {
+  font-family: var(--font-read);
   font-size: 1.05rem;
-  color: var(--color-tinta-suave);
-  margin: 0;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: var(--esp-3) 0 0;
+}
+
+/* Sello del resumen final */
+.vocab-seal {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-cal);
+  font-size: 44px;
+  border-radius: 16px;
+  line-height: 1;
+  box-shadow: 0 4px 12px -3px rgba(var(--shadow) / 0.3);
+  filter: url(#stamp);
+}
+
+.vocab-seal--jade {
+  background: var(--jade);
 }
 
 /* Botones */
-.btn {
-  appearance: none;
-  border: 1px solid var(--color-linea);
-  background: var(--color-superficie);
-  color: var(--color-tinta);
-  font: inherit;
-  padding: var(--esp-3) var(--esp-4);
-  border-radius: var(--radio);
-  cursor: pointer;
+.vocab-btn {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 14px;
+  padding: 13px 18px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
   transition:
-    transform 0.12s ease,
-    filter 0.12s ease;
+    transform 0.14s var(--ease-ink),
+    box-shadow 0.25s,
+    background 0.2s;
 }
 
-.btn:active {
+.vocab-btn:active {
   transform: scale(0.97);
 }
 
-.btn--tinta {
-  background: var(--color-sello);
-  color: var(--color-papel);
-  border-color: transparent;
-  font-weight: 600;
-  text-align: center;
+.vocab-btn--primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 10px 24px -10px rgba(200, 73, 44, 0.75);
 }
 
-.btn--audio {
-  background: transparent;
-  border-color: var(--color-jade);
-  color: var(--color-jade);
+.vocab-btn--jade {
+  background: var(--jade);
+  color: #fff;
+  box-shadow: 0 10px 24px -10px rgba(67, 132, 111, 0.7);
+}
+
+.vocab-btn--ghost {
+  background: var(--bg-elevated);
+  color: var(--accent);
+  border-color: var(--surface-line);
+}
+
+.vocab-btn--audio {
+  background: var(--bg-elevated);
+  color: var(--jade);
+  border-color: var(--jade);
+}
+
+.vocab-btn--block {
+  width: 100%;
+}
+
+.vocab-btn--sm {
+  min-height: 40px;
+  padding: 8px 15px;
+  font-size: 13px;
+  border-radius: 11px;
 }
 
 .vocab__grados {
@@ -119,37 +229,8 @@
   gap: var(--esp-3);
 }
 
-.vocab__grados .btn,
-.vocab__grados .grade {
+.vocab__grados .vocab-btn {
   flex: 1;
-}
-
-.grade {
-  appearance: none;
-  font: inherit;
-  font-weight: 600;
-  padding: var(--esp-4);
-  border-radius: var(--radio);
-  border: 1px solid transparent;
-  color: var(--color-papel);
-  cursor: pointer;
-  transition: transform 0.12s ease;
-}
-
-.grade:active {
-  transform: scale(0.97);
-}
-
-.grade--otra {
-  background: var(--color-sello);
-}
-
-.grade--bien {
-  background: var(--color-jade);
-}
-
-.grade--facil {
-  background: var(--color-oro);
 }
 
 .vocab--fin {
@@ -159,13 +240,18 @@
   padding-top: var(--esp-8);
 }
 
-.vocab__hanzi-grande {
-  font-size: 3rem;
-  color: var(--color-jade);
-  margin: 0;
+.vocab__resumen {
+  font-family: var(--font-read);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 280px;
 }
 
-.vocab__resumen {
-  font-size: 1.1rem;
-  color: var(--color-tinta-suave);
+@media (prefers-reduced-motion: reduce) {
+  .vocab.scr,
+  .vocab-flip-inner {
+    animation: none;
+    transition-duration: 0.01ms;
+  }
 }

@@ -14,9 +14,9 @@ import {
 } from './session';
 
 const GRADOS: { grado: GradoFsrs; etiqueta: string; clase: string }[] = [
-  { grado: 1, etiqueta: 'Otra vez', clase: 'grade grade--otra' },
-  { grado: 3, etiqueta: 'Bien', clase: 'grade grade--bien' },
-  { grado: 4, etiqueta: 'Fácil', clase: 'grade grade--facil' },
+  { grado: 1, etiqueta: 'Otra vez', clase: 'vocab-btn vocab-btn--ghost' },
+  { grado: 3, etiqueta: 'Bien', clase: 'vocab-btn vocab-btn--jade' },
+  { grado: 4, etiqueta: 'Fácil', clase: 'vocab-btn vocab-btn--primary' },
 ];
 
 export function createVocabView(): View {
@@ -33,10 +33,18 @@ export function createVocabView(): View {
     root.replaceChildren(
       el(
         'section',
-        { class: 'vocab vocab--fin' },
-        el('p', { class: 'vocab__hanzi-grande', attrs: { 'aria-hidden': 'true' }, text: '✓' }),
+        { class: 'vocab vocab--fin scr' },
+        el('div', {
+          class: 'vocab-seal vocab-seal--jade',
+          attrs: { 'aria-hidden': 'true' },
+          text: '✓',
+        }),
         el('p', { class: 'vocab__resumen', text: mensaje }),
-        el('a', { class: 'btn btn--tinta', attrs: { href: '#/' }, text: 'Volver al inicio' }),
+        el('a', {
+          class: 'vocab-btn vocab-btn--primary vocab-btn--block',
+          attrs: { href: '#/' },
+          text: 'Volver al inicio',
+        }),
       ),
     );
   }
@@ -73,39 +81,48 @@ export function createVocabView(): View {
       el('span', { text: `${String(restantes)} por repasar` }),
     );
 
-    const cara = el(
+    const flip = el(
       'div',
-      { class: `srs-card${estado.revelada ? ' is-revealed' : ''}` },
+      { class: `vocab-flip${estado.revelada ? ' on' : ''}` },
       el(
         'div',
-        { class: 'srs-card__face srs-card__front' },
-        el('span', { class: 'srs-card__hanzi', text: lexema.hanzi }),
-        el('span', { class: 'srs-card__pista', text: 'Toca para revelar' }),
-      ),
-      el(
-        'div',
-        { class: 'srs-card__face srs-card__back' },
-        el('span', { class: 'srs-card__pinyin', text: lexema.pinyin }),
-        el('span', { class: 'srs-card__es', text: lexema.es }),
-        ...(lexema.ejemplo
-          ? [el('p', { class: 'srs-card__ejemplo', text: lexema.ejemplo.hanzi })]
-          : []),
-        el('button', {
-          class: 'btn btn--audio',
-          text: '🔊 Escuchar',
-          attrs: { type: 'button', 'aria-label': 'Escuchar pronunciación' },
-          on: {
-            click: (event) => {
-              event.stopPropagation();
-              hablar(lexema.hanzi);
+        { class: 'vocab-flip-inner' },
+        el(
+          'div',
+          { class: 'vocab-face' },
+          el('span', {
+            class: 'vocab-wm',
+            attrs: { 'aria-hidden': 'true' },
+            text: lexema.hanzi,
+          }),
+          el('span', { class: 'vocab-card-hanzi', text: lexema.hanzi }),
+          el('span', { class: 'vocab-card-pista', text: 'Toca para revelar' }),
+        ),
+        el(
+          'div',
+          { class: 'vocab-face vocab-face-back' },
+          el('span', { class: 'vocab-card-pinyin', text: lexema.pinyin }),
+          el('span', { class: 'vocab-card-es', text: lexema.es }),
+          ...(lexema.ejemplo
+            ? [el('p', { class: 'vocab-card-ejemplo', text: lexema.ejemplo.hanzi })]
+            : []),
+          el('button', {
+            class: 'vocab-btn vocab-btn--audio vocab-btn--sm',
+            text: '🔊 Escuchar',
+            attrs: { type: 'button', 'aria-label': 'Escuchar pronunciación' },
+            on: {
+              click: (event) => {
+                event.stopPropagation();
+                hablar(lexema.hanzi);
+              },
             },
-          },
-        }),
+          }),
+        ),
       ),
     );
 
     if (!estado.revelada) {
-      cara.addEventListener('click', () => {
+      flip.addEventListener('click', () => {
         estado = revelar(estado);
         render();
       });
@@ -132,7 +149,7 @@ export function createVocabView(): View {
           'div',
           { class: 'vocab__grados' },
           el('button', {
-            class: 'btn btn--tinta',
+            class: 'vocab-btn vocab-btn--primary vocab-btn--block',
             text: 'Mostrar',
             attrs: { type: 'button' },
             on: {
@@ -144,7 +161,7 @@ export function createVocabView(): View {
           }),
         );
 
-    root.replaceChildren(el('section', { class: 'vocab' }, progreso, cara, acciones));
+    root.replaceChildren(el('section', { class: 'vocab scr' }, progreso, flip, acciones));
   }
 
   return {
