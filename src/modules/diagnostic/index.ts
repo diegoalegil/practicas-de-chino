@@ -1,16 +1,20 @@
 import type { View } from '../../types';
 import { el } from '../../ui/dom';
 import { LEXEMAS } from '../../content';
+import { TEXTOS } from '../reading/data';
+import { hablar } from '../../core/audio';
 import './diagnostic.css';
 import {
   construirBanco,
-  crearEstadoDiagnostico,
+  crearEstado,
   estaCompleto,
   resumir,
-  responderItem,
+  responder,
   siguienteItem,
+  HABILIDADES,
   MAX_ITEMS,
   type EstadoDiagnostico,
+  type Habilidad,
   type ItemDiagnostico,
   type ResumenDiagnostico,
 } from './diagnostic.logic';
@@ -20,6 +24,22 @@ import { construirResultado, guardarResultado } from './resultado';
 type Fase = 'intro' | 'item' | 'feedback' | 'guardando' | 'fin';
 
 const RUTA_VOCAB = '#/vocabulario';
+
+/** Etiqueta corta y cálida de cada habilidad (para progreso y radar). */
+const ETIQUETA: Record<Habilidad, string> = {
+  vocab: 'Vocabulario',
+  lectura: 'Lectura',
+  escucha: 'Escucha',
+  escritura: 'Escritura',
+};
+
+/** Pista mostrada sobre las opciones según la habilidad del ítem. */
+const PISTA: Record<Habilidad, string> = {
+  vocab: '¿Qué significa?',
+  lectura: 'Según el texto…',
+  escucha: 'Escucha y elige el carácter',
+  escritura: '¿Cómo se escribe?',
+};
 
 export function createDiagnosticView(): View {
   let root: HTMLElement;
@@ -63,7 +83,7 @@ export function createDiagnosticView(): View {
     }
     const latencia = Date.now() - mostradoEn;
     ultimaCorrecta = opcion === itemActual.correcta;
-    estado = responderItem(estado, ultimaCorrecta, latencia);
+    estado = responder(estado, ultimaCorrecta, latencia);
     fase = 'feedback';
     render();
   }
@@ -82,11 +102,11 @@ export function createDiagnosticView(): View {
         el('span', { class: 'diag-brush', attrs: { 'aria-hidden': 'true' } }),
         el('p', {
           class: 'diag-texto',
-          text: 'Esto no es un examen. Es una breve calibración para ver dónde está tu reconocimiento ahora mismo y despertar lo que ya llevas dentro.',
+          text: 'Esto no es un examen. Es una breve calibración para ver dónde está tu chino ahora mismo y despertar lo que ya llevas dentro.',
         }),
         el('p', {
           class: 'diag-texto diag-suave',
-          text: 'Unas doce preguntas de hanzi a significado. Responde a tu ritmo, sin prisa.',
+          text: 'Tocaremos cuatro habilidades —vocabulario, lectura, escucha y escritura— con unas pocas preguntas de cada una. Responde a tu ritmo, sin prisa.',
         }),
         el('button', {
           class: 'diag-btn diag-btn-primary diag-cta',
@@ -99,6 +119,63 @@ export function createDiagnosticView(): View {
           },
         }),
       ),
+    );
+  }
+
+  /** Tarjeta de estímulo según la habilidad del ítem. */
+  function renderEstimulo(item: ItemDiagnostico, enFeedback: boolean): HTMLElement {
+    if (item.habilidad === 'escucha') {
+      const audio = item.audio ?? '';
+      return el(
+        'div',
+        { class: 'diag-card diag-card-audio' },
+        el('button', {
+          class: 'diag-btn diag-audio-btn',
+          text: '▶ Reproducir',
+          attrs: { type: 'button', 'aria-label': 'Reproducir audio' },
+          on: {
+            click: () => {
+              // Gesto explícito del usuario: nunca autoplay.
+              hablar(audio);
+            },
+          },
+        }),
+        el('span', {
+          class: 'diag-pinyin',
+          text: enFeedback ? `${item.correcta} · ${item.pinyin}` : '',
+        }),
+      );
+    }
+
+    if (item.habilidad === 'lectura') {
+      const [contexto = '', enunciado = ''] = item.prompt.split('\n\n');
+      return el(
+        'div',
+        { class: 'diag-card diag-card-lectura' },
+        el('p', { class: 'diag-lectura-frase', text: contexto }),
+        el('p', { class: 'diag-lectura-pregunta', text: enunciado }),
+      );
+    }
+
+    if (item.habilidad === 'escritura') {
+      return el(
+        'div',
+        { class: 'diag-card diag-card-escritura' },
+        el('span', { class: 'diag-q-prompt', text: item.prompt }),
+      );
+    }
+
+    // vocab
+    return el(
+      'div',
+      { class: 'diag-card' },
+      el('span', {
+        class: 'diag-card-wm',
+        attrs: { 'aria-hidden': 'true' },
+        text: item.prompt,
+      }),
+      el('span', { class: 'diag-q-hanzi', text: item.prompt }),
+      el('span', { class: 'diag-pinyin', text: enFeedback ? item.pinyin : '' }),
     );
   }
 
@@ -152,7 +229,7 @@ export function createDiagnosticView(): View {
             class: 'diag-feedback-texto',
             text: ultimaCorrecta
               ? 'Lo reconoces. Seguimos.'
-              : `Es «${item.correcta}». Lo guardamos para repasarlo.`,
+              : `Era «${item.correcta}». Lo guardamos para repasarlo.`,
           }),
           el('button', {
             class: 'diag-btn diag-btn-primary diag-btn-sm diag-siguiente',
@@ -165,18 +242,18 @@ export function createDiagnosticView(): View {
             },
           }),
         )
-      : el('p', { class: 'diag-pista', text: '¿Qué significa?' });
+      : el('p', { class: 'diag-pista', text: PISTA[item.habilidad] });
 
     root.replaceChildren(
       el(
         'section',
-        { class: 'diag-view diag-item' },
+        { class: `diag-view diag-item diag-skill-${item.habilidad}` },
         el(
           'div',
           { class: 'diag-progreso' },
           el('p', {
             class: 'diag-contador',
-            text: `Calibrando · ${String(numero)}`,
+            text: `${ETIQUETA[item.habilidad]} · ${String(numero)}`,
           }),
           el(
             'div',
@@ -184,17 +261,7 @@ export function createDiagnosticView(): View {
             el('i', { attrs: { style: `width:${String(pct)}%` } }),
           ),
         ),
-        el(
-          'div',
-          { class: 'diag-card' },
-          el('span', {
-            class: 'diag-card-wm',
-            attrs: { 'aria-hidden': 'true' },
-            text: item.hanzi,
-          }),
-          el('span', { class: 'diag-q-hanzi', text: item.hanzi }),
-          el('span', { class: 'diag-pinyin', text: enFeedback ? item.pinyin : '' }),
-        ),
+        renderEstimulo(item, enFeedback),
         opciones,
         feedback,
       ),
@@ -217,20 +284,15 @@ export function createDiagnosticView(): View {
   }
 
   function radarSvg(r: ResumenDiagnostico): HTMLElement {
-    // Radar de 4 ejes derivado del resumen (reconocimiento, precision, agilidad,
-    // alcance). Solo visualizacion; no altera ninguna metrica.
+    // Radar de las 4 HABILIDADES: cada eje es el nivel relativo de una habilidad
+    // (porcentaje de aciertos). Solo visualización; no altera ninguna métrica.
     const cx = 102;
     const cy = 102;
     const radio = 74;
-    const ejes = [
-      { etq: 'Reconoce', v: r.totalItems > 0 ? r.aciertos / r.totalItems : 0 },
-      { etq: 'Precisión', v: r.porcentaje / 100 },
-      {
-        etq: 'Agilidad',
-        v: r.latenciaMediaMs > 0 ? Math.max(0.15, Math.min(1, 4000 / r.latenciaMediaMs)) : 0.5,
-      },
-      { etq: 'Alcance', v: Math.min(1, r.nivelHsk / 6) },
-    ];
+    const ejes = HABILIDADES.map((h) => {
+      const p = r.perfil[h];
+      return { etq: ETIQUETA[h], v: p.total > 0 ? p.aciertos / p.total : 0 };
+    });
     const n = ejes.length;
     const punto = (i: number, escala: number): [number, number] => {
       const ang = -Math.PI / 2 + (i / n) * Math.PI * 2;
@@ -310,7 +372,7 @@ export function createDiagnosticView(): View {
           radarSvg(r),
           el('p', {
             class: 'diag-carta-cuerpo',
-            text: 'Reconoces mucho más de lo que crees. La base está intacta; solo hay que despertar tu producción y sacarle brillo al óxido.',
+            text: 'Cada habilidad tiene su propio pulso, y eso está bien. Reconoces mucho más de lo que crees: la base está intacta y solo hay que sacarle brillo al óxido.',
           }),
           el(
             'dl',
@@ -318,7 +380,7 @@ export function createDiagnosticView(): View {
             el(
               'div',
               { class: 'diag-carta-dato' },
-              el('dt', { text: 'Reconocidas' }),
+              el('dt', { text: 'Aciertos' }),
               el('dd', { text: `${String(r.aciertos)} / ${String(r.totalItems)}` }),
             ),
             el(
@@ -366,8 +428,8 @@ export function createDiagnosticView(): View {
   return {
     mount(target) {
       root = target;
-      const banco = construirBanco(LEXEMAS, Date.now());
-      estado = crearEstadoDiagnostico(banco);
+      const banco = construirBanco({ lexemas: LEXEMAS, textos: TEXTOS }, Date.now());
+      estado = crearEstado(banco);
       fase = 'intro';
       render();
     },

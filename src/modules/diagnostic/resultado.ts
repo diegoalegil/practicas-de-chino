@@ -2,7 +2,7 @@
 // 'diagnostico'). Otros módulos (progreso, home) pueden leerlo para adaptar la UI.
 
 import { get, put } from '../../core/storage';
-import type { ResumenDiagnostico } from './diagnostic.logic';
+import type { Habilidad, PerfilHabilidad, ResumenDiagnostico } from './diagnostic.logic';
 
 const STORE = 'progress';
 export const CLAVE_DIAGNOSTICO = 'diagnostico';
@@ -11,12 +11,15 @@ export const CLAVE_DIAGNOSTICO = 'diagnostico';
 export interface ResultadoDiagnostico {
   id: string;
   fecha: number;
+  /** Nivel global (media de las habilidades evaluadas). */
   nivelHsk: number;
   totalItems: number;
   aciertos: number;
   porcentaje: number;
   latenciaMediaMs: number;
   reactivadas: number;
+  /** Perfil por habilidad (nivel + aciertos/total). */
+  perfil: Record<Habilidad, PerfilHabilidad>;
 }
 
 export function construirResultado(
@@ -33,6 +36,7 @@ export function construirResultado(
     porcentaje: resumen.porcentaje,
     latenciaMediaMs: resumen.latenciaMediaMs,
     reactivadas,
+    perfil: resumen.perfil,
   };
 }
 

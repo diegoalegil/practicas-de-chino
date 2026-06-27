@@ -3,12 +3,17 @@
 // crearlas como nuevas (estabilidad mínima), les damos una estabilidad inicial
 // alta (3..7 días) en estado Review. Cuanto más rápida fue la respuesta, más
 // estable la consideramos.
+//
+// Ahora es MULTI-SKILL: según la habilidad acertada sembramos el tipo de tarjeta
+// adecuado (vocab -> recognition, escritura -> production, escucha -> listening).
+// La lectura no tiene lexema asociado, así que no siembra tarjetas.
 
 import { State, type Card } from 'ts-fsrs';
 import { nuevaTarjeta } from '../../core/srs/fsrs';
 import { get, put } from '../../core/storage';
+import type { TipoTarjeta } from '../../types';
 import type { TarjetaUsuario } from '../vocab/types';
-import type { RespuestaItem } from './diagnostic.logic';
+import type { Habilidad, RespuestaItem } from './diagnostic.logic';
 import { LATENCIA_FRAGIL_MS } from './diagnostic.logic';
 
 const STORE = 'cards';
@@ -17,6 +22,20 @@ const DIA_MS = 86_400_000;
 /** Mínimo y máximo de días de estabilidad inicial para una reactivación. */
 export const DIAS_MIN = 3;
 export const DIAS_MAX = 7;
+
+/** Habilidad acertada -> tipo de tarjeta SRS a sembrar. `undefined` = no sembrar. */
+export function tipoPorHabilidad(habilidad: Habilidad): TipoTarjeta | undefined {
+  switch (habilidad) {
+    case 'vocab':
+      return 'recognition';
+    case 'escritura':
+      return 'production';
+    case 'escucha':
+      return 'listening';
+    case 'lectura':
+      return undefined; // sin lexema concreto: no se reactiva como tarjeta
+  }
+}
 
 /**
  * Mapea la latencia de un acierto a días de estabilidad inicial:
@@ -52,26 +71,30 @@ export function construirCardReactivado(latenciaMs: number, ahora: Date): Card {
   };
 }
 
-/** Construye la TarjetaUsuario de reconocimiento reactivada para un lexema. */
+/** Construye la TarjetaUsuario reactivada de un lexema para un tipo concreto. */
 export function construirTarjetaReactivada(
   lexemaId: string,
+  tipo: TipoTarjeta,
   latenciaMs: number,
   ahora: Date,
 ): TarjetaUsuario {
   return {
-    id: `${lexemaId}:recognition`,
+    id: `${lexemaId}:${tipo}`,
     lexemaId,
-    tipo: 'recognition',
+    tipo,
     origen: 'reactivacion',
     fsrs: construirCardReactivado(latenciaMs, ahora),
   };
 }
 
 /**
- * Siembra el SRS a partir de las respuestas ACERTADAS del diagnóstico.
- * - Solo acierto: lo que falló no se reactiva (se aprenderá como nuevo).
- * - Si ya existe una tarjeta de reconocimiento para ese lexema con estabilidad
- *   >= la propuesta, NO se degrada (idempotencia, no pisar progreso real).
+ * Siembra el SRS a partir de las respuestas ACERTADAS del diagnóstico, según su
+ * habilidad:
+ *  - vocab -> recognition, escritura -> production, escucha -> listening.
+ *  - lectura no tiene lexema concreto: se ignora.
+ *  - Solo aciertos: lo que falló se aprenderá como nuevo.
+ *  - Idempotente: si ya existe una tarjeta de ese tipo con estabilidad >= la
+ *    propuesta, NO se degrada (no pisar progreso real).
  * Devuelve cuántas tarjetas se sembraron/actualizaron.
  */
 export async function sembrarReactivacion(
@@ -80,11 +103,15 @@ export async function sembrarReactivacion(
 ): Promise<number> {
   let sembradas = 0;
   for (const r of respuestas) {
-    if (!r.correcto) {
+    if (!r.correcto || r.lexemaId === '') {
       continue;
     }
-    const id = `${r.lexemaId}:recognition`;
-    const nueva = construirTarjetaReactivada(r.lexemaId, r.latenciaMs, ahora);
+    const tipo = tipoPorHabilidad(r.habilidad);
+    if (!tipo) {
+      continue;
+    }
+    const id = `${r.lexemaId}:${tipo}`;
+    const nueva = construirTarjetaReactivada(r.lexemaId, tipo, r.latenciaMs, ahora);
     const existente = await get<TarjetaUsuario>(STORE, id);
     if (existente && existente.fsrs.stability >= nueva.fsrs.stability) {
       continue; // No degradar memoria ya consolidada.
