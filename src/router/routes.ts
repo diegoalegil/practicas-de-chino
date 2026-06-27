@@ -57,4 +57,12 @@ export const routes: readonly Route[] = [
     tab: false,
     load: () => import('../modules/progress').then((m) => m.createProgressView()),
   },
+  {
+    path: '/ajustes',
+    title: 'Ajustes',
+    label: 'Ajustes',
+    hanzi: '设',
+    tab: false,
+    load: () => import('../modules/settings').then((m) => m.createSettingsView()),
+  },
 ];

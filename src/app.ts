@@ -18,6 +18,11 @@ export function mountApp(root: HTMLElement): void {
       el('span', { class: 'app-header__hanzi', attrs: { 'aria-hidden': 'true' }, text: '练' }),
       el('span', { class: 'app-header__title', text: 'Prácticas de Chino' }),
     ),
+    el('a', {
+      class: 'app-header__gear',
+      attrs: { href: '#/ajustes', 'aria-label': 'Ajustes' },
+      text: '设',
+    }),
   );
 
   const outlet = el('main', { class: 'app-outlet', attrs: { id: 'outlet' } });
