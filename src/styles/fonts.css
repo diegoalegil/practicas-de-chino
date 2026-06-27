@@ -1,0 +1,41 @@
+/* Fuentes self-host (subset) para offline real (clave: fuentes).
+   Generadas por `npm run fonts` (scripts/subset-fonts.mjs) en public/fonts/.
+   Estos @font-face proveen las familias que usan --font-read, --font-title
+   y --font-cal (definidos en tokens.css). font-display:swap evita FOIT.
+
+   Rutas: el sitio se despliega bajo base '/practicas-de-chino/' (vite.config.ts),
+   por lo que las URLs llevan ese prefijo para resolver bien en GitHub Pages.
+   Vite reescribe rutas absolutas de public/ que empiezan por la base, así que
+   estas URLs también funcionan en dev/preview. Si cambias `base`, ajústalas. */
+
+/* Noto Serif SC — usada por --font-read y --font-title (serif de lectura). */
+@font-face {
+  font-family: 'Noto Serif SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/practicas-de-chino/fonts/NotoSerifSC-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Noto Serif SC';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/practicas-de-chino/fonts/NotoSerifSC-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Noto Serif SC';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/practicas-de-chino/fonts/NotoSerifSC-700.woff2') format('woff2');
+}
+
+/* Ma Shan Zheng — usada por --font-cal (caligrafía de pincel). Solo 400. */
+@font-face {
+  font-family: 'Ma Shan Zheng';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/practicas-de-chino/fonts/MaShanZheng-Regular.woff2') format('woff2');
+}
