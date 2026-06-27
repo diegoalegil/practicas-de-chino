@@ -3,7 +3,7 @@
 import { mkdirSync, readFileSync } from 'node:fs';
 import sharp from 'sharp';
 
-const PAPER = '#f7f3ea';
+const PAPER = '#f3ead8';
 const svg = readFileSync('public/favicon.svg');
 
 mkdirSync('public/icons', { recursive: true });
