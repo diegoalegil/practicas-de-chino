@@ -36,10 +36,13 @@
   color: var(--text-muted);
 }
 
-/* Tarjeta con volteo 3D */
+/* Tarjeta de revelado: cruce de opacidad/visibilidad entre las dos caras.
+   No usa backface-visibility (poco fiable en iOS Safari): solo una cara es
+   visible a la vez, evitando la superposición. */
 .vocab-flip {
-  perspective: 1600px;
+  position: relative;
   width: 100%;
+  min-height: 340px;
   cursor: pointer;
 }
 
@@ -51,19 +54,11 @@
   position: relative;
   width: 100%;
   min-height: 340px;
-  transform-style: preserve-3d;
-  transition: transform 0.6s var(--ease-brush);
-}
-
-.vocab-flip.on .vocab-flip-inner {
-  transform: rotateY(180deg);
 }
 
 .vocab-face {
   position: absolute;
   inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   border-radius: 24px;
   border: 1px solid var(--surface-line);
   background: var(--bg-elevated);
@@ -78,11 +73,29 @@
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.4) inset,
     0 14px 30px -20px rgba(var(--shadow) / 0.6);
+  transition:
+    opacity 0.3s var(--ease-ink),
+    transform 0.45s var(--ease-brush);
 }
 
 .vocab-face-back {
-  transform: rotateY(180deg);
   background: linear-gradient(170deg, var(--bg-elevated), var(--bg-sunken));
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.97);
+}
+
+/* Al revelar: oculta la cara frontal y muestra la trasera. */
+.vocab-flip.on .vocab-face:not(.vocab-face-back) {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.97);
+}
+
+.vocab-flip.on .vocab-face-back {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
 }
 
 /* Marca de agua hanzi sutil en la cara frontal */
@@ -250,7 +263,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .vocab.scr,
-  .vocab-flip-inner {
+  .vocab-face {
     animation: none;
     transition-duration: 0.01ms;
   }
