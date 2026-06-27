@@ -38,11 +38,11 @@ const NOMBRES_MES = [
   'Dic',
 ];
 
-const ETIQUETAS_DOMINIO: { clave: keyof Dominio; etiqueta: string; clase: string }[] = [
-  { clave: 'maduras', etiqueta: 'Maduras', clase: 'progress-dominio__barra--maduras' },
-  { clave: 'jovenes', etiqueta: 'Jóvenes', clase: 'progress-dominio__barra--jovenes' },
-  { clave: 'aprendiendo', etiqueta: 'Aprendiendo', clase: 'progress-dominio__barra--aprendiendo' },
-  { clave: 'nuevas', etiqueta: 'Nuevas', clase: 'progress-dominio__barra--nuevas' },
+const ETIQUETAS_DOMINIO: { clave: keyof Dominio; etiqueta: string }[] = [
+  { clave: 'maduras', etiqueta: 'Maduras' },
+  { clave: 'jovenes', etiqueta: 'Jóvenes' },
+  { clave: 'aprendiendo', etiqueta: 'Aprendiendo' },
+  { clave: 'nuevas', etiqueta: 'Nuevas' },
 ];
 
 function svgEl<K extends keyof SVGElementTagNameMap>(
@@ -56,26 +56,35 @@ function svgEl<K extends keyof SVGElementTagNameMap>(
   return node;
 }
 
-function tarjetaResumen(valor: string, etiqueta: string, clase: string): HTMLElement {
+function encabezadoSeccion(titulo: string, jade = false): HTMLElement {
   return el(
     'div',
-    { class: `progress-stat ${clase}` },
-    el('span', { class: 'progress-stat__valor', text: valor }),
-    el('span', { class: 'progress-stat__etiqueta', text: etiqueta }),
+    { class: 'prog-sec-h' },
+    el('span', { class: 'prog-sec-t', text: titulo }),
+    el('span', { class: `prog-brush${jade ? ' prog-brush--jade' : ''}` }),
+  );
+}
+
+function tarjetaResumen(valor: string, etiqueta: string, tono: string): HTMLElement {
+  return el(
+    'div',
+    { class: 'prog-stat' },
+    el('span', { class: `prog-stat-num ${tono}`, text: valor }),
+    el('span', { class: 'prog-stat-lbl', text: etiqueta }),
   );
 }
 
 function renderResumen(resumen: ResumenEstadisticas): HTMLElement {
   return el(
     'div',
-    { class: 'progress-stats' },
+    { class: 'prog-stat-grid' },
     tarjetaResumen(
       `${String(resumen.racha)}`,
       resumen.racha === 1 ? 'día de racha' : 'días de racha',
-      'progress-stat--racha',
+      'prog-stat-num--seal',
     ),
-    tarjetaResumen(`${String(resumen.totalRepasos)}`, 'repasos', 'progress-stat--total'),
-    tarjetaResumen(`${String(resumen.porcentajeAcierto)}%`, 'acierto', 'progress-stat--acierto'),
+    tarjetaResumen(`${String(resumen.totalRepasos)}`, 'repasos', ''),
+    tarjetaResumen(`${String(resumen.porcentajeAcierto)}%`, 'acierto', 'prog-stat-num--jade'),
   );
 }
 
@@ -90,7 +99,7 @@ function renderHeatmap(dias: readonly DiaRepasos[]): HTMLElement {
     width: '100%',
     role: 'img',
     'aria-label': 'Mapa de calor de repasos de las últimas 12 semanas',
-    class: 'progress-heatmap__svg',
+    class: 'prog-heat-svg',
   });
 
   // Etiquetas de día (Lun, Mié, Vie) en su fila correspondiente (0=Dom..6=Sáb).
@@ -103,7 +112,7 @@ function renderHeatmap(dias: readonly DiaRepasos[]): HTMLElement {
     const txt = svgEl('text', {
       x: '0',
       y: `${String(MARGEN_SUP + fila * PASO + CELDA - 2)}`,
-      class: 'progress-heatmap__label',
+      class: 'prog-heat-label',
     });
     txt.textContent = texto;
     svg.appendChild(txt);
@@ -126,7 +135,7 @@ function renderHeatmap(dias: readonly DiaRepasos[]): HTMLElement {
           const txt = svgEl('text', {
             x: `${String(x)}`,
             y: `${String(MARGEN_SUP - 5)}`,
-            class: 'progress-heatmap__label',
+            class: 'prog-heat-label',
           });
           txt.textContent = nombre;
           svg.appendChild(txt);
@@ -140,8 +149,8 @@ function renderHeatmap(dias: readonly DiaRepasos[]): HTMLElement {
       y: `${String(y)}`,
       width: `${String(CELDA)}`,
       height: `${String(CELDA)}`,
-      rx: '3',
-      class: `progress-heatmap__celda progress-heatmap__celda--n${String(nivel)}`,
+      rx: '2',
+      class: `prog-hc prog-hc--n${String(nivel)}`,
     });
     const etiqueta =
       dia.total === 1 ? `${dia.fecha}: 1 repaso` : `${dia.fecha}: ${String(dia.total)} repasos`;
@@ -153,19 +162,19 @@ function renderHeatmap(dias: readonly DiaRepasos[]): HTMLElement {
 
   const leyenda = el(
     'div',
-    { class: 'progress-heatmap__leyenda' },
-    el('span', { class: 'progress-heatmap__leyenda-texto', text: 'Menos' }),
+    { class: 'prog-heat-leyenda' },
+    el('span', { class: 'prog-heat-leyenda-txt', text: 'Menos' }),
     ...[0, 1, 2, 3, 4].map((n) =>
-      el('span', { class: `progress-heatmap__muestra progress-heatmap__celda--n${String(n)}` }),
+      el('span', { class: `prog-heat-muestra prog-hc--n${String(n)}` }),
     ),
-    el('span', { class: 'progress-heatmap__leyenda-texto', text: 'Más' }),
+    el('span', { class: 'prog-heat-leyenda-txt', text: 'Más' }),
   );
 
   return el(
     'section',
-    { class: 'progress-heatmap' },
-    el('h2', { class: 'progress-seccion__titulo', text: 'Actividad' }),
-    el('div', { class: 'progress-heatmap__scroll' }, svg),
+    { class: 'prog-card' },
+    encabezadoSeccion('Actividad', true),
+    el('div', { class: 'prog-heat-scroll' }, svg),
     leyenda,
   );
 }
@@ -173,32 +182,32 @@ function renderHeatmap(dias: readonly DiaRepasos[]): HTMLElement {
 function renderDominio(dominio: Dominio): HTMLElement {
   const total = dominio.nuevas + dominio.aprendiendo + dominio.jovenes + dominio.maduras;
 
-  const filas = ETIQUETAS_DOMINIO.map(({ clave, etiqueta, clase }) => {
+  const filas = ETIQUETAS_DOMINIO.map(({ clave, etiqueta }) => {
     const valor = dominio[clave];
     const pct = total === 0 ? 0 : Math.round((valor / total) * 100);
     return el(
       'div',
-      { class: 'progress-dominio__fila' },
-      el('span', { class: 'progress-dominio__etiqueta', text: etiqueta }),
+      { class: 'prog-bl' },
+      el('span', { class: 'prog-bl-l', text: etiqueta }),
       el(
         'div',
-        { class: 'progress-dominio__pista' },
-        el('div', {
-          class: `progress-dominio__barra ${clase}`,
+        { class: 'prog-bl-t' },
+        el('i', {
+          class: `prog-bl-fill prog-bl-fill--${clave}`,
           attrs: { style: `width: ${String(pct)}%` },
         }),
       ),
-      el('span', { class: 'progress-dominio__valor', text: String(valor) }),
+      el('span', { class: 'prog-bl-v', text: String(valor) }),
     );
   });
 
   return el(
     'section',
-    { class: 'progress-dominio' },
-    el('h2', { class: 'progress-seccion__titulo', text: 'Dominio' }),
+    { class: 'prog-card' },
+    encabezadoSeccion('Dominio'),
     el(
       'p',
-      { class: 'progress-dominio__intro' },
+      { class: 'prog-dominio-intro' },
       el('span', { text: `${String(total)} ` }),
       el('span', { text: total === 1 ? 'tarjeta en tu baraja' : 'tarjetas en tu baraja' }),
     ),
@@ -209,17 +218,21 @@ function renderDominio(dominio: Dominio): HTMLElement {
 function renderVacio(): HTMLElement {
   return el(
     'section',
-    { class: 'progress-vacio' },
-    el('p', { class: 'progress-vacio__icono', attrs: { 'aria-hidden': 'true' }, text: '墨' }),
+    { class: 'prog-vacio' },
+    el('p', { class: 'prog-vacio-icono', attrs: { 'aria-hidden': 'true' }, text: '墨' }),
     el('p', {
-      class: 'progress-vacio__titulo',
+      class: 'prog-vacio-titulo',
       text: 'Aún no hay nada que medir',
     }),
     el('p', {
-      class: 'progress-vacio__texto',
+      class: 'prog-vacio-texto',
       text: 'Haz tu primer repaso y aquí verás tu racha, tu progreso y un mapa de tu constancia.',
     }),
-    el('a', { class: 'btn btn--tinta', attrs: { href: '#/' }, text: 'Empezar a repasar' }),
+    el('a', {
+      class: 'prog-btn prog-btn--primary prog-btn--block',
+      attrs: { href: '#/' },
+      text: 'Empezar a repasar',
+    }),
   );
 }
 
@@ -228,7 +241,7 @@ export function createProgressView(): View {
 
   function render(reviews: readonly LogReview[], cards: readonly TarjetaConFsrs[]): void {
     if (reviews.length === 0 && cards.length === 0) {
-      root.replaceChildren(el('section', { class: 'progress' }, renderVacio()));
+      root.replaceChildren(el('section', { class: 'prog scr' }, renderVacio()));
       return;
     }
 
@@ -239,8 +252,8 @@ export function createProgressView(): View {
 
     const contenido = el(
       'section',
-      { class: 'progress' },
-      el('h1', { class: 'progress__titulo', text: 'Tu progreso' }),
+      { class: 'prog scr' },
+      el('h1', { class: 'prog-titulo', text: 'Tu progreso' }),
       renderResumen(resumen),
       renderHeatmap(dias),
       renderDominio(dominio),
@@ -249,7 +262,7 @@ export function createProgressView(): View {
     if (reviews.length === 0) {
       contenido.insertBefore(
         el('p', {
-          class: 'progress__nota',
+          class: 'prog-nota',
           text: 'Todavía no has repasado: empieza para llenar tu mapa.',
         }),
         contenido.children[1] ?? null,
@@ -263,7 +276,7 @@ export function createProgressView(): View {
     async mount(target) {
       root = target;
       root.replaceChildren(
-        el('p', { class: 'progress__cargando', text: 'Calculando tus estadísticas…' }),
+        el('p', { class: 'prog-cargando', text: 'Calculando tus estadísticas…' }),
       );
       const [reviews, cards] = await Promise.all([
         getAll<LogReview>('reviews'),

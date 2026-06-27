@@ -1,215 +1,274 @@
-.progress {
+/* ===========================================================================
+   Módulo Progreso — re-skin Claude Design. Todas las clases con prefijo prog-.
+   =========================================================================== */
+
+.prog {
   display: flex;
   flex-direction: column;
-  gap: var(--esp-6);
+  gap: var(--esp-2);
+  animation: prog-scr-in 0.4s var(--ease-brush);
 }
 
-.progress__titulo {
-  margin: 0;
+@keyframes prog-scr-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.prog-titulo {
+  margin: var(--esp-2) 2px 0;
+  font-family: var(--font-title);
+  font-weight: 700;
   font-size: 1.5rem;
-  color: var(--color-tinta);
+  letter-spacing: 0.5px;
+  color: var(--text);
 }
 
-.progress__cargando {
+.prog-cargando {
   text-align: center;
-  color: var(--color-tinta-suave);
+  color: var(--text-muted);
 }
 
-.progress__nota {
-  margin: 0;
+.prog-nota {
+  margin: 0 2px;
   font-size: 0.9rem;
-  color: var(--color-tinta-suave);
+  color: var(--text-muted);
 }
 
-.progress-seccion__titulo {
-  margin: 0 0 var(--esp-3);
-  font-size: 1.1rem;
-  color: var(--color-tinta);
+/* --- Encabezado de sección con pincel ------------------------------------ */
+.prog-sec-h {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0 2px var(--esp-3);
 }
 
-/* Tarjetas de resumen */
-.progress-stats {
+.prog-sec-t {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.prog-brush {
+  height: 8px;
+  width: 64px;
+  background: var(--accent);
+  border-radius: 5px;
+  filter: url(#rough);
+  -webkit-mask: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+  opacity: 0.92;
+}
+
+.prog-brush--jade {
+  background: var(--jade);
+}
+
+/* --- Tarjeta genérica ----------------------------------------------------- */
+.prog-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--surface-line);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 8px 22px -16px rgba(var(--shadow) / 0.6);
+}
+
+/* --- Tarjetas de resumen (stat) ------------------------------------------- */
+.prog-stat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--esp-3);
+  gap: 10px;
 }
 
-.progress-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--esp-1);
-  padding: var(--esp-4) var(--esp-2);
+.prog-stat {
+  background: var(--bg-elevated);
+  border: 1px solid var(--surface-line);
+  border-radius: 16px;
+  padding: 15px 6px;
   text-align: center;
-  background: var(--color-superficie);
-  border: 1px solid var(--color-linea);
-  border-radius: var(--radio-lg);
-  box-shadow: var(--sombra);
+  box-shadow: 0 6px 18px -16px rgba(var(--shadow) / 0.6);
 }
 
-.progress-stat__valor {
-  font-size: 1.9rem;
+.prog-stat-num {
+  font-family: var(--font-title);
   font-weight: 700;
+  font-size: 27px;
   line-height: 1;
-  color: var(--color-tinta);
+  color: var(--text);
 }
 
-.progress-stat__etiqueta {
-  font-size: 0.78rem;
-  color: var(--color-tinta-suave);
+.prog-stat-num--seal {
+  color: var(--accent);
 }
 
-.progress-stat--racha .progress-stat__valor {
-  color: var(--color-sello);
+.prog-stat-num--jade {
+  color: var(--jade);
 }
 
-.progress-stat--acierto .progress-stat__valor {
-  color: var(--color-jade);
+.prog-stat-lbl {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 5px;
 }
 
-/* Heatmap */
-.progress-heatmap {
-  background: var(--color-superficie);
-  border: 1px solid var(--color-linea);
-  border-radius: var(--radio-lg);
-  box-shadow: var(--sombra);
-  padding: var(--esp-4);
-}
-
-.progress-heatmap__scroll {
+/* --- Heatmap -------------------------------------------------------------- */
+.prog-heat-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-.progress-heatmap__svg {
+.prog-heat-svg {
   display: block;
   min-width: 320px;
 }
 
-.progress-heatmap__label {
-  font-family: var(--fuente-ui);
+.prog-heat-label {
+  font-family: var(--font-ui);
   font-size: 9px;
-  fill: var(--color-tinta-suave);
+  fill: var(--text-faint);
+  font-weight: 600;
 }
 
-.progress-heatmap__celda {
-  stroke: var(--color-linea);
-  stroke-width: 1;
+.prog-hc {
+  fill: var(--bg-sunken);
 }
 
-.progress-heatmap__celda--n0 {
-  fill: var(--color-papel);
+.prog-hc--n0 {
+  fill: var(--bg-sunken);
 }
 
-.progress-heatmap__celda--n1 {
-  fill: color-mix(in srgb, var(--color-jade) 28%, var(--color-papel));
+.prog-hc--n1 {
+  fill: var(--jade-soft);
 }
 
-.progress-heatmap__celda--n2 {
-  fill: color-mix(in srgb, var(--color-jade) 52%, var(--color-papel));
+.prog-hc--n2 {
+  fill: var(--jade);
 }
 
-.progress-heatmap__celda--n3 {
-  fill: color-mix(in srgb, var(--color-jade) 76%, var(--color-papel));
+.prog-hc--n3 {
+  fill: var(--jade-500);
 }
 
-.progress-heatmap__celda--n4 {
-  fill: var(--color-jade);
+.prog-hc--n4 {
+  fill: var(--jade-700);
 }
 
-.progress-heatmap__leyenda {
+.prog-heat-leyenda {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--esp-1);
+  gap: 3px;
   margin-top: var(--esp-3);
 }
 
-.progress-heatmap__leyenda-texto {
+.prog-heat-leyenda-txt {
   font-size: 0.72rem;
-  color: var(--color-tinta-suave);
-  margin: 0 var(--esp-1);
+  color: var(--text-faint);
+  margin: 0 4px;
 }
 
-.progress-heatmap__muestra {
+.prog-heat-muestra {
   display: inline-block;
   width: 12px;
   height: 12px;
-  border-radius: 3px;
-  border: 1px solid var(--color-linea);
+  border-radius: 2px;
+  background: var(--bg-sunken);
 }
 
-/* Dominio */
-.progress-dominio {
-  background: var(--color-superficie);
-  border: 1px solid var(--color-linea);
-  border-radius: var(--radio-lg);
-  box-shadow: var(--sombra);
-  padding: var(--esp-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--esp-3);
+/* Reutiliza los niveles de relleno como fondo en la leyenda (no son SVG). */
+.prog-heat-muestra.prog-hc--n0 {
+  background: var(--bg-sunken);
+}
+.prog-heat-muestra.prog-hc--n1 {
+  background: var(--jade-soft);
+}
+.prog-heat-muestra.prog-hc--n2 {
+  background: var(--jade);
+}
+.prog-heat-muestra.prog-hc--n3 {
+  background: var(--jade-500);
+}
+.prog-heat-muestra.prog-hc--n4 {
+  background: var(--jade-700);
 }
 
-.progress-dominio__intro {
-  margin: 0;
+/* --- Dominio (barras bl) -------------------------------------------------- */
+.prog-dominio-intro {
+  margin: 0 0 var(--esp-2);
   font-size: 0.9rem;
-  color: var(--color-tinta-suave);
+  color: var(--text-muted);
 }
 
-.progress-dominio__fila {
-  display: grid;
-  grid-template-columns: 92px 1fr 32px;
+.prog-bl {
+  display: flex;
   align-items: center;
-  gap: var(--esp-3);
+  gap: 10px;
+  margin: 9px 0;
 }
 
-.progress-dominio__etiqueta {
-  font-size: 0.85rem;
-  color: var(--color-tinta);
+.prog-bl-l {
+  width: 96px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
 }
 
-.progress-dominio__pista {
-  height: 12px;
-  background: var(--color-papel);
-  border: 1px solid var(--color-linea);
-  border-radius: 999px;
+.prog-bl-t {
+  flex: 1;
+  height: 7px;
+  border-radius: 4px;
+  background: var(--bg-sunken);
   overflow: hidden;
 }
 
-.progress-dominio__barra {
+.prog-bl-fill {
+  display: block;
   height: 100%;
-  border-radius: 999px;
-  transition: width 0.4s ease;
+  background: var(--jade);
+  border-radius: 4px;
   min-width: 2px;
+  transition: width 0.4s var(--ease-ink);
 }
 
-.progress-dominio__barra--maduras {
-  background: var(--color-jade);
+.prog-bl-fill--maduras {
+  background: var(--jade-700);
 }
 
-.progress-dominio__barra--jovenes {
-  background: color-mix(in srgb, var(--color-jade) 55%, var(--color-papel));
+.prog-bl-fill--jovenes {
+  background: var(--jade-500);
 }
 
-.progress-dominio__barra--aprendiendo {
-  background: var(--color-oro);
+.prog-bl-fill--aprendiendo {
+  background: var(--gold);
 }
 
-.progress-dominio__barra--nuevas {
-  background: var(--color-sello-tenue);
+.prog-bl-fill--nuevas {
+  background: var(--accent-soft);
 }
 
-.progress-dominio__valor {
-  font-size: 0.85rem;
-  font-weight: 600;
+.prog-bl-v {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  width: 30px;
   text-align: right;
-  color: var(--color-tinta-suave);
 }
 
-/* Estado vacío */
-.progress-vacio {
+/* --- Estado vacío -------------------------------------------------------- */
+.prog-vacio {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -218,23 +277,68 @@
   padding: var(--esp-8) var(--esp-4);
 }
 
-.progress-vacio__icono {
-  font-family: var(--fuente-hanzi);
+.prog-vacio-icono {
+  font-family: var(--font-cal);
   font-size: 4rem;
-  color: var(--color-jade);
+  color: var(--jade);
   margin: 0;
-  opacity: 0.8;
+  opacity: 0.85;
+  line-height: 1;
 }
 
-.progress-vacio__titulo {
+.prog-vacio-titulo {
   margin: 0;
+  font-family: var(--font-title);
   font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-tinta);
+  font-weight: 700;
+  color: var(--text);
 }
 
-.progress-vacio__texto {
+.prog-vacio-texto {
   margin: 0;
   max-width: 32ch;
-  color: var(--color-tinta-suave);
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* --- Botón (réplica de .btn con prefijo) --------------------------------- */
+.prog-btn {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 14px;
+  padding: 13px 18px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  text-decoration: none;
+  transition:
+    transform 0.14s var(--ease-ink),
+    box-shadow 0.25s,
+    background 0.2s;
+}
+
+.prog-btn:active {
+  transform: scale(0.97);
+}
+
+.prog-btn--primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 10px 24px -10px rgba(200, 73, 44, 0.75);
+}
+
+.prog-btn--block {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prog,
+  .prog-bl-fill {
+    animation: none;
+    transition: none;
+  }
 }
