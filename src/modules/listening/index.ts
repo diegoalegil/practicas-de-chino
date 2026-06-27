@@ -42,20 +42,30 @@ function pararVoz(): void {
 function svgContornoTono(tono: Tono, activo: boolean): SVGSVGElement {
   const svg = document.createElementNS(SVG_NS, 'svg');
   svg.setAttribute('viewBox', '0 0 100 100');
-  svg.setAttribute('class', 'lis-tono__svg');
+  svg.setAttribute('class', 'escucha-tone-svg');
   svg.setAttribute('aria-hidden', 'true');
-
-  const guia = document.createElementNS(SVG_NS, 'line');
-  guia.setAttribute('x1', '10');
-  guia.setAttribute('y1', '95');
-  guia.setAttribute('x2', '90');
-  guia.setAttribute('y2', '95');
-  guia.setAttribute('class', 'lis-tono__guia');
-  svg.appendChild(guia);
 
   const path = document.createElementNS(SVG_NS, 'path');
   path.setAttribute('d', pathTono(tono));
-  path.setAttribute('class', activo ? 'lis-tono__curva is-activa' : 'lis-tono__curva');
+  path.setAttribute(
+    'class',
+    activo ? 'escucha-tone-svg__curva is-activa' : 'escucha-tone-svg__curva',
+  );
+  path.setAttribute('fill', 'none');
+  svg.appendChild(path);
+
+  return svg;
+}
+
+/** Crea el SVG grande del contorno del tono correcto (animado al revelarse). */
+function svgBigtone(tono: Tono): SVGSVGElement {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 100 100');
+  svg.setAttribute('class', 'escucha-bigtone');
+  svg.setAttribute('aria-hidden', 'true');
+
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', pathTono(tono));
   path.setAttribute('fill', 'none');
   svg.appendChild(path);
 
@@ -156,11 +166,41 @@ export function createListeningView(): View {
     render();
   }
 
+  /** Selector segmentado de ejercicio (estética .seg del diseño). */
+  function selector(): HTMLElement {
+    const items: ReadonlyArray<{ clave: Ejercicio; etiqueta: string; iniciar: () => void }> = [
+      { clave: 'dictado', etiqueta: 'Dictado', iniciar: nuevoDictado },
+      { clave: 'tonos', etiqueta: 'Tonos', iniciar: nuevoTono },
+      { clave: 'opcion', etiqueta: 'Audio › 字', iniciar: nuevaOpcion },
+    ];
+    return el(
+      'div',
+      { class: 'escucha-seg', attrs: { role: 'tablist' } },
+      ...items.map((it) =>
+        el('button', {
+          class: estado.ejercicio === it.clave ? 'escucha-seg__btn is-on' : 'escucha-seg__btn',
+          text: it.etiqueta,
+          attrs: {
+            type: 'button',
+            role: 'tab',
+            'aria-selected': estado.ejercicio === it.clave ? 'true' : 'false',
+          },
+          on: {
+            click: () => {
+              it.iniciar();
+              render();
+            },
+          },
+        }),
+      ),
+    );
+  }
+
   function botonRepetir(): HTMLElement {
     return el(
       'button',
       {
-        class: 'lis-play',
+        class: 'escucha-play',
         attrs: { type: 'button', 'aria-label': 'Reproducir de nuevo' },
         on: {
           click: () => {
@@ -168,7 +208,7 @@ export function createListeningView(): View {
           },
         },
       },
-      el('span', { class: 'lis-play__icono', attrs: { 'aria-hidden': 'true' }, text: '🔊' }),
+      el('span', { class: 'escucha-play__icono', attrs: { 'aria-hidden': 'true' }, text: '🔊' }),
       el('span', { text: 'Escuchar de nuevo' }),
     );
   }
@@ -179,13 +219,13 @@ export function createListeningView(): View {
     }
     return el(
       'div',
-      { class: 'lis-aviso', attrs: { role: 'note' } },
+      { class: 'escucha-aviso', attrs: { role: 'note' } },
       el('p', {
-        class: 'lis-aviso__titulo',
+        class: 'escucha-aviso__titulo',
         text: 'No se detecta una voz china en este dispositivo',
       }),
       el('p', {
-        class: 'lis-aviso__texto',
+        class: 'escucha-aviso__texto',
         text: 'Puedes seguir practicando, pero para oír el audio instala una voz: Ajustes de iOS › Accesibilidad › Contenido hablado › Voces › Chino.',
       }),
     );
@@ -194,9 +234,9 @@ export function createListeningView(): View {
   function encabezado(titulo: string): HTMLElement {
     return el(
       'header',
-      { class: 'lis-cabecera' },
+      { class: 'escucha-cabecera' },
       el('button', {
-        class: 'lis-volver',
+        class: 'escucha-volver',
         text: '‹ Ejercicios',
         attrs: { type: 'button' },
         on: {
@@ -205,55 +245,62 @@ export function createListeningView(): View {
           },
         },
       }),
-      el('h2', { class: 'lis-titulo', text: titulo }),
+      el('h2', { class: 'escucha-titulo', text: titulo }),
     );
   }
 
   function tarjetaMenu(
     titulo: string,
     descripcion: string,
-    icono: string,
+    glifo: string,
     onClick: () => void,
   ): HTMLElement {
     return el(
       'button',
       {
-        class: 'lis-card',
+        class: 'escucha-card',
         attrs: { type: 'button' },
         on: { click: onClick },
       },
-      el('span', { class: 'lis-card__icono', attrs: { 'aria-hidden': 'true' }, text: icono }),
+      el('span', { class: 'escucha-card__glifo', attrs: { 'aria-hidden': 'true' }, text: glifo }),
       el(
         'span',
-        { class: 'lis-card__cuerpo' },
-        el('span', { class: 'lis-card__titulo', text: titulo }),
-        el('span', { class: 'lis-card__desc', text: descripcion }),
+        { class: 'escucha-card__cuerpo' },
+        el('span', { class: 'escucha-card__titulo', text: titulo }),
+        el('span', { class: 'escucha-card__desc', text: descripcion }),
       ),
     );
   }
 
-  function bandaVeredicto(correcto: string, glosa: string): HTMLElement {
+  function bandaVeredicto(correcto: string, glosa: string, contorno?: Tono): HTMLElement {
     const ok = estado.veredicto === 'acierto';
-    return el(
-      'div',
-      { class: `lis-veredicto ${ok ? 'is-ok' : 'is-mal'}`, attrs: { role: 'status' } },
+    const hijos: HTMLElement[] = [
       el('p', {
-        class: 'lis-veredicto__marca',
+        class: 'escucha-veredicto__marca',
         attrs: { 'aria-hidden': 'true' },
         text: ok ? '✓' : '✕',
       }),
       el('p', {
-        class: 'lis-veredicto__texto',
+        class: 'escucha-veredicto__texto',
         text: ok ? '¡Correcto!' : 'Casi. La respuesta era:',
       }),
-      el('p', { class: 'lis-veredicto__hanzi', attrs: { lang: 'zh' }, text: correcto }),
-      el('p', { class: 'lis-veredicto__glosa', text: glosa }),
+      el('p', { class: 'escucha-veredicto__hanzi', attrs: { lang: 'zh' }, text: correcto }),
+      el('p', { class: 'escucha-veredicto__glosa', text: glosa }),
+    ];
+    const banda = el(
+      'div',
+      { class: `escucha-veredicto ${ok ? 'is-ok' : 'is-mal'}`, attrs: { role: 'status' } },
+      ...hijos,
     );
+    if (contorno !== undefined) {
+      banda.appendChild(svgBigtone(contorno));
+    }
+    return banda;
   }
 
   function botonSiguiente(onNext: () => void): HTMLElement {
     return el('button', {
-      class: 'btn btn--tinta lis-siguiente',
+      class: 'escucha-btn escucha-btn--primary escucha-siguiente',
       text: 'Siguiente',
       attrs: { type: 'button' },
       on: {
@@ -268,15 +315,15 @@ export function createListeningView(): View {
   function renderMenu(): void {
     const aviso = avisoVoz();
     const tarjetas: HTMLElement[] = [
-      tarjetaMenu('Dictado', 'Escucha y escribe el pinyin o elige el carácter.', '✍️', () => {
+      tarjetaMenu('Dictado', 'Escucha y escribe el pinyin o elige el carácter.', '听', () => {
         nuevoDictado();
         render();
       }),
-      tarjetaMenu('Tonos', 'Identifica el tono de la sílaba que oyes.', '〰️', () => {
+      tarjetaMenu('Tonos', 'Identifica el tono de la sílaba que oyes.', '声', () => {
         nuevoTono();
         render();
       }),
-      tarjetaMenu('Audio › Hanzi', 'Escucha y elige el carácter correcto.', '👂', () => {
+      tarjetaMenu('Audio › Hanzi', 'Escucha y elige el carácter correcto.', '字', () => {
         nuevaOpcion();
         render();
       }),
@@ -284,10 +331,16 @@ export function createListeningView(): View {
     root.replaceChildren(
       el(
         'section',
-        { class: 'lis' },
-        el('h1', { class: 'lis-portada__titulo', text: 'Escucha y dictado' }),
+        { class: 'escucha escucha-scr' },
+        el(
+          'div',
+          { class: 'escucha-sec-h' },
+          el('p', { class: 'escucha-sec-t', text: 'Escucha y dictado' }),
+          el('span', { class: 'escucha-brush', attrs: { 'aria-hidden': 'true' } }),
+        ),
+        selector(),
         ...(aviso ? [aviso] : []),
-        el('div', { class: 'lis-menu' }, ...tarjetas),
+        el('div', { class: 'escucha-menu' }, ...tarjetas),
       ),
     );
   }
@@ -301,7 +354,7 @@ export function createListeningView(): View {
     const resuelto = estado.veredicto !== 'pendiente';
 
     const formInput = el('input', {
-      class: 'lis-input',
+      class: 'escucha-dict-in',
       attrs: {
         type: 'text',
         inputmode: 'latin',
@@ -328,7 +381,7 @@ export function createListeningView(): View {
     const form = el(
       'form',
       {
-        class: 'lis-form',
+        class: 'escucha-form',
         on: {
           submit: (event) => {
             event.preventDefault();
@@ -340,7 +393,7 @@ export function createListeningView(): View {
       },
       formInput,
       el('button', {
-        class: 'btn btn--tinta',
+        class: 'escucha-btn escucha-btn--primary escucha-btn--block',
         text: 'Comprobar',
         attrs: { type: 'submit' },
       }),
@@ -348,12 +401,12 @@ export function createListeningView(): View {
 
     const opcionesGrid = el(
       'div',
-      { class: 'lis-opciones' },
+      { class: 'escucha-opciones' },
       ...estado.opciones.map((op) => {
         const esCorrecta = op.id === lexema.id;
-        const clases = ['lis-opcion'];
+        const clases = ['escucha-diag-opt', 'escucha-opt-hanzi'];
         if (resuelto && esCorrecta) {
-          clases.push('is-correcta');
+          clases.push('is-right');
         }
         return el('button', {
           class: clases.join(' '),
@@ -382,8 +435,9 @@ export function createListeningView(): View {
 
     const cuerpo: HTMLElement[] = [
       encabezado('Dictado'),
+      selector(),
       el('p', {
-        class: 'lis-instruccion',
+        class: 'escucha-instruccion',
         text: 'Escucha la palabra y escribe su pinyin, o elige el carácter.',
       }),
       botonRepetir(),
@@ -392,7 +446,7 @@ export function createListeningView(): View {
     if (!resuelto) {
       cuerpo.push(
         form,
-        el('p', { class: 'lis-separador', text: 'o elige el carácter' }),
+        el('p', { class: 'escucha-separador', text: 'o elige el carácter' }),
         opcionesGrid,
       );
     } else {
@@ -403,7 +457,7 @@ export function createListeningView(): View {
       );
     }
 
-    root.replaceChildren(el('section', { class: 'lis' }, ...cuerpo));
+    root.replaceChildren(el('section', { class: 'escucha escucha-scr' }, ...cuerpo));
     if (!resuelto) {
       formInput.focus();
     }
@@ -419,15 +473,15 @@ export function createListeningView(): View {
 
     const botones = el(
       'div',
-      { class: 'lis-tonos' },
+      { class: 'escucha-tone-grid' },
       ...TONOS.map((tono) => {
         const esCorrecto = tono === silaba.tono;
-        const clases = ['lis-tono'];
+        const clases = ['escucha-tone-opt'];
         if (resuelto) {
           if (esCorrecto) {
-            clases.push('is-correcta');
+            clases.push('is-right');
           } else if (estado.respuesta === String(tono)) {
-            clases.push('is-fallo');
+            clases.push('is-wrong');
           }
         }
         return el(
@@ -455,14 +509,15 @@ export function createListeningView(): View {
             },
           },
           svgContornoTono(tono, resuelto && esCorrecto),
-          el('span', { class: 'lis-tono__num', text: String(tono) }),
+          el('span', { class: 'escucha-tone-num', text: String(tono) }),
         );
       }),
     );
 
     const cuerpo: HTMLElement[] = [
       encabezado('Tonos'),
-      el('p', { class: 'lis-instruccion', text: 'Escucha la sílaba e identifica su tono.' }),
+      selector(),
+      el('p', { class: 'escucha-instruccion', text: 'Escucha la sílaba e identifica su tono.' }),
       botonRepetir(),
       botones,
     ];
@@ -472,12 +527,13 @@ export function createListeningView(): View {
         bandaVeredicto(
           silaba.hanzi,
           `${silaba.pinyin} (tono ${String(silaba.tono)}) · ${silaba.es}`,
+          silaba.tono,
         ),
         botonSiguiente(nuevoTono),
       );
     }
 
-    root.replaceChildren(el('section', { class: 'lis' }, ...cuerpo));
+    root.replaceChildren(el('section', { class: 'escucha escucha-scr' }, ...cuerpo));
   }
 
   function renderOpcion(): void {
@@ -490,15 +546,15 @@ export function createListeningView(): View {
 
     const grid = el(
       'div',
-      { class: 'lis-opciones lis-opciones--grande' },
+      { class: 'escucha-opciones escucha-opciones--grande' },
       ...estado.opciones.map((op) => {
         const esCorrecta = op.id === lexema.id;
-        const clases = ['lis-opcion'];
+        const clases = ['escucha-diag-opt', 'escucha-opt-hanzi'];
         if (resuelto) {
           if (esCorrecta) {
-            clases.push('is-correcta');
+            clases.push('is-right');
           } else if (estado.respuesta === op.id) {
-            clases.push('is-fallo');
+            clases.push('is-wrong');
           }
         }
         return el('button', {
@@ -528,7 +584,8 @@ export function createListeningView(): View {
 
     const cuerpo: HTMLElement[] = [
       encabezado('Audio › Hanzi'),
-      el('p', { class: 'lis-instruccion', text: 'Escucha y elige el carácter correcto.' }),
+      selector(),
+      el('p', { class: 'escucha-instruccion', text: 'Escucha y elige el carácter correcto.' }),
       botonRepetir(),
       grid,
     ];
@@ -540,7 +597,7 @@ export function createListeningView(): View {
       );
     }
 
-    root.replaceChildren(el('section', { class: 'lis' }, ...cuerpo));
+    root.replaceChildren(el('section', { class: 'escucha escucha-scr' }, ...cuerpo));
   }
 
   function render(): void {
